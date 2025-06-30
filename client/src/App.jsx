@@ -1,12 +1,15 @@
 import { ThemeProvider } from "@/components/theme-provider"
 import Navbar from "./components/Navbar"
-import HomePage from "./pages/HomePage"
+import { Outlet } from "react-router-dom"
+
 
 function App() {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
     <Navbar/>
-    <HomePage/>
+    <main>
+      <Outlet/>
+    </main>
     </ThemeProvider>
   )
 }

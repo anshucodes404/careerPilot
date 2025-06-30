@@ -6,10 +6,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Sun, Moon } from "lucide-react";
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
+import {
+  SignedIn,
+  SignedOut,
+  UserButton,
+  SignInButton,
+} from "@clerk/clerk-react";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
 
   return (
     <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
@@ -29,15 +34,21 @@ const Navbar = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <Button variant="ghost">Login</Button>
+        <SignedOut>
+          <SignInButton mode="modal">
+            <Button variant="ghost">Login</Button>
+          </SignInButton>
+        </SignedOut>
+        <SignedIn>
+          <UserButton />
+        </SignedIn>
         <Button variant="default">Get Started</Button>
-        <ModeToggle/>
-        
+        <ModeToggle />
       </motion.div>
 
       {/* Mobile menu toggle */}
       <div className="sm:hidden flex items-center gap-2">
-        <ModeToggle/>
+        <ModeToggle />
         <Button
           variant="ghost"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -56,9 +67,15 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="absolute top-16 right-6 bg-white dark:bg-gray-800 p-4 rounded shadow-md sm:hidden"
           >
-            <Button variant="ghost" className="w-full mb-2">
-              Login
-            </Button>
+            <SignedOut>
+              <SignInButton mode="modal">
+                <Button variant="ghost" className="w-full" >Login</Button>
+              </SignInButton>
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+
             <Button variant="default" className="w-full">
               Get Started
             </Button>

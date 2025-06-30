@@ -1,10 +1,20 @@
 import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
 import './index.css'
-import App from './App.jsx'
+import ReactDOM from "react-dom/client";
+import { RouterProvider } from "react-router-dom";
+import { ClerkProvider } from "@clerk/clerk-react";
+import router from './router';
 
-createRoot(document.getElementById('root')).render(
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
+
+if (!clerkPubKey) {
+  throw new Error('Missing Publishable Key')
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <App />
+    <ClerkProvider publishableKey={clerkPubKey} >
+    <RouterProvider router={router} />
+    </ClerkProvider>
   </StrictMode>,
 )
