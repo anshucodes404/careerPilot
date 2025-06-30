@@ -70,23 +70,37 @@ CareerPilot/
 - Modern React architecture with Vite
 
 ---
-
 ## 🛠️ Getting Started
 
-1. **Clone the repository**
+1. **Clone the repository to your local system**
+
+   ```bash
+   git clone https://github.com/your-username/CareerPilot.git
+   cd CareerPilot
+   ```
+
 2. **Install dependencies** in both `client` and `server` folders
+
+   ```bash
+   cd client
+   npm install
+   cd ../server
+   npm install
+   ```
+
 3. **Set up environment variables** (see `.env.example` if available)
+
 4. **Run the development servers**
 
-```bash
-cd client
-npm install
-npm run dev
-# In another terminal
-cd ../server
-npm install
-npm start
-```
+   ```bash
+   # In one terminal
+   cd client
+   npm run dev
+
+   # In another terminal
+   cd server
+   npm start
+   ```
 
 ---
 
