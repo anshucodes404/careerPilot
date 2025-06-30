@@ -68,7 +68,7 @@ const Navbar = () => {
             className="absolute top-16 right-6 bg-white dark:bg-gray-800 p-4 rounded shadow-md sm:hidden"
           >
             <SignedOut>
-              <SignInButton mode="modal">
+              <SignInButton>
                 <Button variant="ghost" className="w-full" >Login</Button>
               </SignInButton>
             </SignedOut>
