@@ -6,6 +6,7 @@ import DashboardPage from "./pages/DashboardPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
+import ApplicationsPage from "./pages/ApplicationsPage";
 
 // const profileLoader = async () => {
 //   const res = await fetch("/api/profile");
@@ -39,6 +40,14 @@ const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
         // loader: profileLoader,
+      },
+      {
+        path: "applications",
+        element: (
+          <ProtectedRoutes>
+            <ApplicationsPage />
+          </ProtectedRoutes>
+        ),
       },
     ],
   },

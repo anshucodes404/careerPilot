@@ -17,7 +17,7 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between items-center px-6 py-4 shadow-md bg-white dark:bg-gray-900 sticky top-0 z-50">
+    <nav className="flex justify-between items-center px-6 py-2.5 shadow-md bg-white dark:bg-background sticky top-0 z-50">
       <motion.h1
         className="text-2xl font-bold text-teal-600 dark:text-teal-400"
         initial={{ opacity: 0, x: -20 }}
