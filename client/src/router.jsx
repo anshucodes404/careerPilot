@@ -7,14 +7,13 @@ import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ProtectedRoutes from "./components/ProtectedRoutes";
 import ApplicationsPage from "./pages/ApplicationsPage";
-
+import TodayGoalsPage from "./pages/TodayGoalsPage";
+import WeeklyGoalsPage from "./pages/WeeklyGoalsPage";
 // const profileLoader = async () => {
 //   const res = await fetch("/api/profile");
 //   if (!res.ok) throw new Error("Failed to load profile");
 //   return res.json();
 // };
-
-
 
 const router = createBrowserRouter([
   {
@@ -24,6 +23,7 @@ const router = createBrowserRouter([
     children: [
       { index: true, element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
+
       {
         path: "dashboard",
         element: (
@@ -46,6 +46,22 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <ApplicationsPage />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "today-goals",
+        element: (
+          <ProtectedRoutes>
+            <TodayGoalsPage />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "week-goals",
+        element: (
+          <ProtectedRoutes>
+            <WeeklyGoalsPage />
           </ProtectedRoutes>
         ),
       },

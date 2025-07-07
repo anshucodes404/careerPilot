@@ -31,7 +31,7 @@ const NotFoundPage = () => {
         transition={{ duration: 0.5, delay: 0.6 }}
       >
         <Link to="/dashboard">
-          <Button size="lg">Back to Home</Button>
+          <Button size="lg">Back to Dashboard</Button>
         </Link>
       </motion.div>
     </div>

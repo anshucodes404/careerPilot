@@ -9,23 +9,65 @@ import { ModeToggle } from "./mode-toggle";
 import {
   SignedIn,
   SignedOut,
-  UserButton,
   SignInButton,
+  UserButton,
 } from "@clerk/clerk-react";
+import {
+  NavigationMenu,
+  NavigationMenuContent,
+  NavigationMenuIndicator,
+  NavigationMenuItem,
+  NavigationMenuLink,
+  NavigationMenuList,
+  NavigationMenuTrigger,
+  NavigationMenuViewport,
+} from "@/components/ui/navigation-menu";
+import { NavLink } from "react-router-dom";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="flex justify-between items-center px-6 py-2.5 shadow-md bg-white dark:bg-background sticky top-0 z-50">
-      <motion.h1
-        className="text-2xl font-bold text-teal-600 dark:text-teal-400"
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.6 }}
-      >
-        Career Pilot
-      </motion.h1>
+    <nav className="flex justify-between items-center px-6 py-2 shadow-md bg-white dark:bg-[#0a0a0a] backdrop-blur-lg sticky top-0 z-50">
+      <NavLink to={"/dashboard"}>
+        <motion.h1
+          className="text-2xl font-bold text-teal-600 dark:text-teal-400"
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.6 }}
+        >
+          Career Pilot
+        </motion.h1>
+      </NavLink>
+
+      <NavigationMenu>
+        <NavigationMenuList className="flex gap-2 justify-center items-center w-full font-semibold">
+          <NavigationMenuItem className={""}>
+            <NavigationMenuLink className="text-gray-800 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
+              <NavLink to="/profile">Profile</NavLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem className={""}>
+            <NavigationMenuLink className="text-gray-800 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
+              <NavLink to="/dashboard" end>
+                Dashboard
+              </NavLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem className={""}>
+            <NavigationMenuLink className="text-gray-800 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
+              <NavLink to="/applications" end>
+                Applications
+              </NavLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+          <NavigationMenuItem className={""}>
+            <NavigationMenuLink className="text-gray-800 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
+              <NavLink to={"/today-goals"}>Goals</NavLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        </NavigationMenuList>
+      </NavigationMenu>
 
       {/* Desktop menu */}
       <motion.div
@@ -69,7 +111,9 @@ const Navbar = () => {
           >
             <SignedOut>
               <SignInButton>
-                <Button variant="ghost" className="w-full" >Login</Button>
+                <Button variant="ghost" className="w-full">
+                  Login
+                </Button>
               </SignInButton>
             </SignedOut>
             <SignedIn>
