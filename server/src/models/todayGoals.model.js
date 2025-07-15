@@ -1,13 +1,17 @@
 import mongoose, { Schema } from "mongoose";
 
 const todayGoalsSchema = new Schema({
-    goalTitle: {
+    userId: {
+      type: String, //clerk id
+      required: true
+    },
+    goalText: {
         type: String,
         required: true
     },
-    isCompleted: {
+    completed: {
         type: Boolean,
-        required: true
+        default: false
     }
 }, { timestamps: true });
 

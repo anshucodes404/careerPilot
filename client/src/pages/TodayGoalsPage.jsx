@@ -12,46 +12,120 @@ import {
 } from "../components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Trash, Edit } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox"
-import GoalsDecidePage from "./GoalsDecidePage";
+import { Checkbox } from "@/components/ui/checkbox";
+import GoalsDecidePage from "../components/GoalsDecidePage";
+import { Badge } from "@/components/ui/badge";
+import { useState } from "react";
+import { useAuth } from "@clerk/clerk-react";
+import { useEffect } from "react";
 
 const TodayGoalsPage = () => {
-  const goals = [
-    {
-      id: 1,
-      text: "2 dsa problems",
-      completed: false,
-    },
-    { 
-      id: 2,
-      text: "web dev problems",
-      completed: false 
-    },
-    { 
-      id: 3,
-      text: "java dsa",
-      completed: false
-     },
-  ];
+  const [goals, setGoals] = useState([]);
+  const [goal, setGoal] = useState("");
+  const [goalCount, setGoalCount] = useState(0);
+  const [token, setToken] = useState("")
 
+  const {getToken} = useAuth()
+
+  // Fetch token on mount
+  useEffect(() => {
+    const fetchToken = async () => {
+      try {
+        const tok = await getToken();
+        setToken(tok);
+      } catch (error) {
+        console.error("Can't get session token: ", error);
+      }
+    };
+    fetchToken();
+  }, [getToken]);
+
+  // Fetch goals when token is available
+  useEffect(() => {
+    if (!token) return; // Don't run if token is not set
+    const getUserTodayGoals = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/api/goals/today-goals", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await res.json();
+        console.log(data);
+        // setGoals(data.goals) // Uncomment and adjust if your API returns goals
+      } catch (error) {
+        console.error("Error fetching goals:", error);
+      }
+    };
+    getUserTodayGoals();
+  }, [token]);
+
+
+ 
+
+  const handleSave = async () => {
+      console.log(goal)
+      console.log(token)
+      const res = await fetch("http://localhost:3000/api/goals/today-goals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({goalText: goal})
+      })
+
+      const data = await res.json();
+      console.log(data)
+  }
+  
 
   const toggleGoal = (goalId) => {
-     goalId.completed = true
+    const index = goals.findIndex((goal) => goal.id === goalId);
+    console.log(index);
+    goals[index].completed = !goals[index].completed;
+    setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
+  };
+
+  const handleAdd = () => {
+    console.log("Add was clicked");
+    setGoals([...goals, { id: { goalCount }, text: goal, completed: false }]);
+    setGoal("");
+    setGoalCount(goalCount + 1);
+    console.log(goals);
+    handleSave()
+  };
+
+  const handleChange = (e) => {
+    setGoal(e.target.value);
+  };
+
+  const handleDelete = (goalId) => {
+    let newGoals = goals.filter(item => item.id !== goalId)  //returns an array
+    setGoals(newGoals)
   }
+
+
   return (
     <>
-     <GoalsDecidePage/>
-      <div className="w-full">
+      <GoalsDecidePage />
+      <div className="w-full mt-4">
         <Card className="mb-4 w-3/4 mx-auto">
           <CardHeader>
             <CardTitle className="text-lg">Add Daily Goal</CardTitle>
           </CardHeader>
           <CardContent className="flex gap-2">
             <Input
+              onChange={handleChange}
               placeholder="e.g., Solve 2 DSA problems"
               className="flex-1"
+              value={goal}
+              onKeyDown={(e) => {
+                if (goal.length >= 5 && e.key === "Enter") handleAdd();
+              }}
             />
-            <Button>
+            <Button onClick={handleAdd} disabled={goal.length <= 5}>
               <Plus size={16} className="mr-1" />
               Add
             </Button>
@@ -64,6 +138,12 @@ const TodayGoalsPage = () => {
           <CardTitle>Today's Goals</CardTitle>
         </CardHeader>
         <CardContent className="space-y-2">
+          {goals.length === 0 && (
+            <h1 className="text-3xl font-bold text-gray-900/30 dark:text-white/30 text-center">
+              Add Goals for Today
+            </h1>
+          )}
+
           {goals.map((goal, index) => (
             <div
               key={index}
@@ -81,12 +161,18 @@ const TodayGoalsPage = () => {
                 </span>
               </div>
               <div className="flex gap-2 text-gray-500">
+                <Badge
+                  className={goal.completed ? "bg-green-600" : "bg-red-600"}
+                >
+                  {goal.completed ? "Completed" : "Pending"}
+                </Badge>
                 <Edit
-                  size={16}
+                  size={18}
                   className="cursor-pointer hover:text-blue-500"
                 />
                 <Trash
-                  size={16}
+                  onClick={() => handleDelete(goal.id)}
+                  size={18}
                   className="cursor-pointer hover:text-red-500"
                 />
               </div>

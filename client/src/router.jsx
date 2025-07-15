@@ -9,6 +9,7 @@ import ProtectedRoutes from "./components/ProtectedRoutes";
 import ApplicationsPage from "./pages/ApplicationsPage";
 import TodayGoalsPage from "./pages/TodayGoalsPage";
 import WeeklyGoalsPage from "./pages/WeeklyGoalsPage";
+import ResumePage from "./pages/ResumePage";
 // const profileLoader = async () => {
 //   const res = await fetch("/api/profile");
 //   if (!res.ok) throw new Error("Failed to load profile");
@@ -62,6 +63,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoutes>
             <WeeklyGoalsPage />
+          </ProtectedRoutes>
+        ),
+      },
+      {
+        path: "resume",
+        element: (
+          <ProtectedRoutes>
+            <ResumePage />
           </ProtectedRoutes>
         ),
       },

@@ -1,5 +1,5 @@
 import React from "react";
-import GoalsDecidePage from "./GoalsDecidePage";
+import GoalsDecidePage from "../components/GoalsDecidePage";
 
 const WeeklyGoalsPage = () => {
   return (
