@@ -22,51 +22,107 @@ import { useEffect } from "react";
 const TodayGoalsPage = () => {
   const [goals, setGoals] = useState([]);
   const [goal, setGoal] = useState("");
-  const [goalCount, setGoalCount] = useState(0);
-  const [token, setToken] = useState("");
-
   const { getToken } = useAuth();
 
   // Fetch token on mount
   useEffect(() => {
-    getTokenFun();
     fetchGoals();
-  }, [token, goals]);
-
-  const getTokenFun = async () => {
-    setToken(await getToken())
-  };
+  }, [getToken]);
 
   const fetchGoals = async () => {
     console.log("Fetching today goals")
+      console.log("Fetching today goals");
+    const token = await getToken();
+    if (!token) {
+      console.error("Authentication token not available.");
+      return;
+    }
+    try {
+      const response = await fetch("http://localhost:3000/api/goals/today-goals", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error(`Failed to fetch goals: ${response.status} ${response.statusText}`);
+      }
+      const data = await response.json();
+      setGoals(data.data || []);
+    } catch (error) {
+      console.error(error);
+      setGoals([]); // Clear goals on error to avoid showing stale data
+    }
     const data = await fetch("http://localhost:3000/api/goals/today-goals", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-    }).then((res) => res.json())
-    console.log(data)
+    })
+    .then((res) => res.json())
+     console.log(data.data)
+     setGoals(data.data)
   }
 
   const handleSave = async () => {
-    console.log(goal);
-    console.log(token);
-    const res = await fetch("http://localhost:3000/api/goals/today-goals", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ goalText: goal }),
-    });
-
-    const data = await res.json();
-    console.log(data);
+    const token = await getToken();
+    if (!token) {
+      console.error("Authentication token not available.");
+      return;
+    }
+    
+    try {
+      await fetch("http://localhost:3000/api/goals/today-goals", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ goalText: goal }),
+      });
+      setGoal(""); // Clear input after successful save
+      fetchGoals(); // Refresh the goals list
+    } catch (error) {
+      console.error("Failed to save goal:", error);
+    }
   };
 
+    const handleDelete = async (goalId) => {
+      const goalToDelete = goals.find((item) => item._id === goalId);
+      if (!goalToDelete) {
+        console.error("Goal not found for deletion");
+        return;
+      }
+
+      const token = await getToken();
+       if (!token) {
+        console.error("Authentication token not available.");
+        return;
+      }
+
+      try {
+        await fetch("http://localhost:3000/api/goals/today-goals", {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            _id: goalToDelete._id,
+            userId: goalToDelete.userId,
+          }),
+        });
+        fetchGoals(); // Refresh the goals list
+      } catch (error) {
+        console.error("Failed to delete goal:", error);
+      }
+    };
+
   const toggleGoal = (goalId) => {
-    const index = goals.findIndex((goal) => goal.id === goalId);
+    const index = goals.findIndex((goal) => goal._id === goalId);
     console.log(index);
     goals[index].completed = !goals[index].completed;
     setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
@@ -75,20 +131,11 @@ const TodayGoalsPage = () => {
   const handleAdd = () => {
     console.log("Add was clicked");
     setGoal("");
-    setGoalCount(goalCount + 1);
     console.log(goals);
     handleSave();
-    // setGoals([...goals, {text: goal}])
+    fetchGoals()
   };
 
-  const handleChange = (e) => {
-    setGoal(e.target.value);
-  };
-
-  const handleDelete = (goalId) => {
-    let newGoals = goals.filter((item) => item.id !== goalId); //returns an array
-    setGoals(newGoals);
-  };
 
   return (
     <>
@@ -100,7 +147,7 @@ const TodayGoalsPage = () => {
           </CardHeader>
           <CardContent className="flex gap-2">
             <Input
-              onChange={handleChange}
+              onChange={(e) => setGoal(e.target.value)}
               placeholder="e.g., Solve 2 DSA problems"
               className="flex-1"
               value={goal}
@@ -127,20 +174,20 @@ const TodayGoalsPage = () => {
             </h1>
           )}
 
-          {goals.map((goal, index) => (
+          {goals.map((goal) => (
             <div
-              key={index}
+              key={goal._id}
               className="flex items-center justify-between border p-2 rounded-md"
             >
               <div className="flex items-center gap-2">
                 <Checkbox
                   checked={goal.completed}
-                  onCheckedChange={() => toggleGoal(goal.id)}
+                  onCheckedChange={() => toggleGoal(goal._id)}
                 />
                 <span
                   className={goal.completed ? "line-through text-gray-400" : ""}
                 >
-                  {goal.text}
+                  {goal.goalText}
                 </span>
               </div>
               <div className="flex gap-2 text-gray-500">
@@ -154,7 +201,7 @@ const TodayGoalsPage = () => {
                   className="cursor-pointer hover:text-blue-500"
                 />
                 <Trash
-                  onClick={() => handleDelete(goal.id)}
+                  onClick={() => handleDelete(goal._id)}
                   size={18}
                   className="cursor-pointer hover:text-red-500"
                 />

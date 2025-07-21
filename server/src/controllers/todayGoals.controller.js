@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { TodayGoal } from "../models/todayGoals.model.js";
 import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
@@ -5,23 +6,21 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getTodayGoals = asyncHandler(async (req, res) => {
-  console.log("getrequest")
+  // console.log("getrequest")
   const user = req.auth();
   const userId = user.userId;
 
   // Fetch all today goals for the user
   const userDocs = await TodayGoal.find({ userId }); // <-- FIXED
-  console.log(userDocs)
+  // console.log(userDocs)
 
-  return res
-    .status(200)
-    .json(
-      new ApiResponse(
-        200,
-        userDocs, // <-- FIXED
-        "Today Goals of the user found"
-      )
-    );
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      userDocs, // <-- FIXED
+      "Today Goals of the user found"
+    )
+  );
 });
 
 const addTodayGoals = asyncHandler(async (req, res) => {
@@ -48,7 +47,7 @@ const addTodayGoals = asyncHandler(async (req, res) => {
       }
     );
 
-    console.log(goal)
+    console.log(goal);
     return res
       .status(200)
       .json(new ApiResponse(200, goal, "Goal created successfully"));
@@ -58,4 +57,28 @@ const addTodayGoals = asyncHandler(async (req, res) => {
   }
 });
 
-export { addTodayGoals, getTodayGoals };
+const deleteGoals = asyncHandler(async (req, res) => {
+  // console.log("req.body:", req.body);
+  const { _id, userId } = req.body;
+
+  const deleted = await TodayGoal.findByIdAndDelete(_id);
+  // console.log("Deleted:", deleted);
+
+  const user = await User.findOne({ userId });
+  console.log("user searching..");
+  if (!user) {
+    throw new ApiError(500, "UserId is not correct");
+  }
+  console.log(user);
+  console.log("user found");
+
+  await User.findOneAndUpdate({ userId }, { $pull: { todayGoals: _id } });
+
+  return res.status(200).json({ deleted });
+}); 
+
+const editGoals = asyncHandler(async (req, res) => {
+  
+})
+
+export { addTodayGoals, getTodayGoals, deleteGoals, editGoals };
