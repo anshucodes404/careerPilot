@@ -75,10 +75,34 @@ const deleteGoals = asyncHandler(async (req, res) => {
   await User.findOneAndUpdate({ userId }, { $pull: { todayGoals: _id } });
 
   return res.status(200).json({ deleted });
-}); 
+});
 
 const editGoals = asyncHandler(async (req, res) => {
+  console.log(req.params._id)
+  console.log(req.body)
+  //finding the id and update
+try {
+    const updatedGoal = await TodayGoal.findOneAndUpdate(
+      { _id: req.params._id },
+      {
+        $set: req.body,
+      },
+      {
+        new: true,
+      }
+    );
   
-})
+    console.log(updatedGoal)
+    if(!updatedGoal){
+      throw new ApiError(404, "Error while updating the goal")
+    }
+  
+    res.status(200).json(
+      new ApiResponse(200, updatedGoal, "Update successfull")
+    )
+} catch (error) {
+  throw new ApiError(400, "Something went wrong while updating", error)
+}
+});
 
 export { addTodayGoals, getTodayGoals, deleteGoals, editGoals };

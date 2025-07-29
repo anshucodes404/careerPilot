@@ -1,6 +1,8 @@
 import React from "react";
+import { GoalProvider } from "../context/goalContext";
 import { Plus } from "lucide-react";
 import { Button } from "../components/ui/button";
+import { motion } from "framer-motion";
 import {
   Card,
   CardHeader,
@@ -11,13 +13,13 @@ import {
   CardContent,
 } from "../components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Trash, Edit } from "lucide-react";
-import { Checkbox } from "@/components/ui/checkbox";
+
 import GoalsDecidePage from "../components/GoalsDecidePage";
-import { Badge } from "@/components/ui/badge";
+
 import { useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
+import GoalItem from "../components/GoalItem";
 
 const TodayGoalsPage = () => {
   const [goals, setGoals] = useState([]);
@@ -30,24 +32,29 @@ const TodayGoalsPage = () => {
   }, [getToken]);
 
   const fetchGoals = async () => {
-    console.log("Fetching today goals")
-      console.log("Fetching today goals");
+    console.log("Fetching today goals");
+    console.log("Fetching today goals");
     const token = await getToken();
     if (!token) {
       console.error("Authentication token not available.");
       return;
     }
     try {
-      const response = await fetch("http://localhost:3000/api/goals/today-goals", {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "http://localhost:3000/api/goals/today-goals",
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (!response.ok) {
-        throw new Error(`Failed to fetch goals: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to fetch goals: ${response.status} ${response.statusText}`
+        );
       }
       const data = await response.json();
       setGoals(data.data || []);
@@ -59,13 +66,12 @@ const TodayGoalsPage = () => {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-    })
-    .then((res) => res.json())
-     console.log(data.data)
-     setGoals(data.data)
-  }
+    }).then((res) => res.json());
+    console.log(data.data);
+    setGoals(data.data);
+  };
 
   const handleSave = async () => {
     const token = await getToken();
@@ -73,7 +79,7 @@ const TodayGoalsPage = () => {
       console.error("Authentication token not available.");
       return;
     }
-    
+
     try {
       await fetch("http://localhost:3000/api/goals/today-goals", {
         method: "POST",
@@ -90,36 +96,36 @@ const TodayGoalsPage = () => {
     }
   };
 
-    const handleDelete = async (goalId) => {
-      const goalToDelete = goals.find((item) => item._id === goalId);
-      if (!goalToDelete) {
-        console.error("Goal not found for deletion");
-        return;
-      }
+  const handleDelete = async (goalId) => {
+    const goalToDelete = goals.find((item) => item._id === goalId);
+    if (!goalToDelete) {
+      console.error("Goal not found for deletion");
+      return;
+    }
 
-      const token = await getToken();
-       if (!token) {
-        console.error("Authentication token not available.");
-        return;
-      }
+    const token = await getToken();
+    if (!token) {
+      console.error("Authentication token not available.");
+      return;
+    }
 
-      try {
-        await fetch("http://localhost:3000/api/goals/today-goals", {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            _id: goalToDelete._id,
-            userId: goalToDelete.userId,
-          }),
-        });
-        fetchGoals(); // Refresh the goals list
-      } catch (error) {
-        console.error("Failed to delete goal:", error);
-      }
-    };
+    try {
+      await fetch("http://localhost:3000/api/goals/today-goals", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          _id: goalToDelete._id,
+          userId: goalToDelete.userId,
+        }),
+      });
+      fetchGoals(); // Refresh the goals list
+    } catch (error) {
+      console.error("Failed to delete goal:", error);
+    }
+  };
 
   const toggleGoal = (goalId) => {
     const index = goals.findIndex((goal) => goal._id === goalId);
@@ -133,12 +139,48 @@ const TodayGoalsPage = () => {
     setGoal("");
     console.log(goals);
     handleSave();
+    fetchGoals();
+  };
+
+  const handleEdit = async (id, goal) => {
+    // setGoals(prev => (prev.map((currentGoal) => (currentGoal._id === id) ? goal : currentGoal )))
+
+    //patching the existing data in DB
+    const token = await getToken()
+    if(!token){
+      console.error("Authentication token not available.");
+      return;
+    }
+
+    console.log(goal)
+
+    try {
+      await fetch(`http://localhost:3000/api/goals/today-goals/${goal._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({goalText: goal.goalText}), //no need to pass userId as the _id of goal will remain same
+      });
+    } catch (error) {
+      console.error("Failed to save the changes", error)
+    }
+
     fetchGoals()
   };
 
-
   return (
-    <>
+    <GoalProvider
+      value={{
+        goals,
+        fetchGoals,
+        handleAdd,
+        toggleGoal,
+        handleDelete,
+        handleEdit,
+      }}
+    >
       <GoalsDecidePage />
       <div className="w-full mt-4">
         <Card className="mb-4 w-3/4 mx-auto">
@@ -174,43 +216,16 @@ const TodayGoalsPage = () => {
             </h1>
           )}
 
-          {goals.map((goal) => (
-            <div
-              key={goal._id}
-              className="flex items-center justify-between border p-2 rounded-md"
-            >
-              <div className="flex items-center gap-2">
-                <Checkbox
-                  checked={goal.completed}
-                  onCheckedChange={() => toggleGoal(goal._id)}
-                />
-                <span
-                  className={goal.completed ? "line-through text-gray-400" : ""}
-                >
-                  {goal.goalText}
-                </span>
+          <motion.div layout className="flex gap-2 flex-col">
+            {goals.map((goal) => (
+              <div key={goal._id} className="w-full">
+                <GoalItem goal={goal} />
               </div>
-              <div className="flex gap-2 text-gray-500">
-                <Badge
-                  className={goal.completed ? "bg-green-600" : "bg-red-600"}
-                >
-                  {goal.completed ? "Completed" : "Pending"}
-                </Badge>
-                <Edit
-                  size={18}
-                  className="cursor-pointer hover:text-blue-500"
-                />
-                <Trash
-                  onClick={() => handleDelete(goal._id)}
-                  size={18}
-                  className="cursor-pointer hover:text-red-500"
-                />
-              </div>
-            </div>
-          ))}
+            ))}
+          </motion.div>
         </CardContent>
       </Card>
-    </>
+    </GoalProvider>
   );
 };
 

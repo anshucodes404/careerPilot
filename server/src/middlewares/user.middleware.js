@@ -6,7 +6,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const registerUser = asyncHandler(async (req, res, next) => {
   const user = req.auth();
   const userId = user?.userId;
-  console.log(userId);
+  // console.log(userId);
 
   if (!userId) {
     throw new ApiError(500, "UserId not found from clerk");
