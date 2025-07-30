@@ -127,11 +127,36 @@ const TodayGoalsPage = () => {
     }
   };
 
-  const toggleGoal = (goalId) => {
+  const toggleGoal = async (goalId) => {
     const index = goals.findIndex((goal) => goal._id === goalId);
-    console.log(index);
-    goals[index].completed = !goals[index].completed;
-    setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
+    // console.log(index);
+    const completed = !goals[index].completed;
+    // setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
+
+
+    //updating the same in server
+      const token = await getToken()
+    if(!token){
+      console.error("Authentication token not available.");
+      return;
+    }
+
+    console.log(goal)
+
+    try {
+     await fetch(`http://localhost:3000/api/goals/today-goals/completed/${goalId}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ completed: completed }), //no need to pass userId as the _id of goal will remain same
+      }).then((res) => res.json()).then((data) => console.log(data))
+
+    } catch (error) {
+      console.error("Failed to save the changes", error)
+    }
+fetchGoals()
   };
 
   const handleAdd = () => {
@@ -155,7 +180,7 @@ const TodayGoalsPage = () => {
     console.log(goal)
 
     try {
-      await fetch(`http://localhost:3000/api/goals/today-goals/${goal._id}`, {
+      await fetch(`http://localhost:3000/api/goals/today-goals/goalText/${goal._id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",

@@ -105,4 +105,27 @@ try {
 }
 });
 
-export { addTodayGoals, getTodayGoals, deleteGoals, editGoals };
+const toggleGoals = asyncHandler(async (req, res) => {
+  console.log(req.body)
+    try {
+      const goal = await TodayGoal.findOneAndUpdate(
+        {_id: req.params._id},
+        {$set: req.body},
+        {new: true}
+      )
+
+      console.log(goal)
+      if(!goal){
+        throw new ApiError(400, "goal not found")
+      }
+
+      res.status(200).json(
+        new ApiResponse(200, goal, "Toggle successfull")
+      )
+
+    } catch (error) {
+      throw new ApiError(400, "Toggle failed", error)
+    }
+})
+
+export { addTodayGoals, getTodayGoals, deleteGoals, editGoals, toggleGoals };
