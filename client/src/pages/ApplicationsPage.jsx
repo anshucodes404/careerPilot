@@ -1,57 +1,16 @@
 import React from "react";
 import CardAppUI from "../components/CardAppUI";
 import { useState, useEffect } from "react";
-import Aside from "../components/Aside";
+import { ApplicationProvider, useApplication } from "../context/applicationContext";
 
 const ApplicationPage = () => {
-  const [app, setApp] = useState([]);
+  const [application, setApplication] = useState([]);
   useEffect(() => {
-    setApp([
-      {
-        company: "Google",
-        role: "Software Engineer Intern",
-        status: "Interviewing",
-      },
-      {
-        company: "Amazon",
-        role: "Backend Developer Intern",
-        status: "Applied",
-      },
-      {
-        company: "Microsoft",
-        role: "Frontend Developer Intern",
-        status: "Rejected",
-      },
-      {
-        company: "Meta",
-        role: "Software Engineer Intern",
-        status: "Passed",
-      },
-      {
-        company: "Netflix",
-        role: "Data Analyst Intern",
-        status: "Interviewing",
-      },
-      {
-        company: "Uber",
-        role: "DevOps Intern",
-        status: "Applied",
-      },
-      {
-        company: "Adobe",
-        role: "Machine Learning Intern",
-        status: "Passed",
-      },
-      {
-        company: "Flipkart",
-        role: "UI/UX Intern",
-        status: "Rejected",
-      },
-    ]);
+    
   }, []);
 
   return (
-    <>
+    <ApplicationProvider>
       <div className="flex">
         <div>
           <header>
@@ -79,7 +38,7 @@ const ApplicationPage = () => {
           </main>
         </div>
       </div>
-    </>
+    </ApplicationProvider>
   );
 };
 

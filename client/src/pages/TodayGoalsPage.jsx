@@ -6,10 +6,7 @@ import { motion } from "framer-motion";
 import {
   Card,
   CardHeader,
-  CardFooter,
   CardTitle,
-  CardAction,
-  CardDescription,
   CardContent,
 } from "../components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -22,20 +19,23 @@ import { useEffect } from "react";
 import GoalItem from "../components/GoalItem";
 
 const TodayGoalsPage = () => {
+
+
+  //need to refactor fetchGoals b/c it  is causing problem in optimisation
+
   const [goals, setGoals] = useState([]);
   const [goal, setGoal] = useState("");
   const { getToken } = useAuth();
-
   // Fetch token on mount
   useEffect(() => {
     fetchGoals();
-  }, [getToken]);
+  }, []);
 
   const fetchGoals = async () => {
     console.log("Fetching today goals");
     console.log("Fetching today goals");
-    const token = await getToken();
-    if (!token) {
+    const authToken = await getToken();
+    if (!authToken) {
       console.error("Authentication token not available.");
       return;
     }
@@ -46,7 +46,7 @@ const TodayGoalsPage = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -62,18 +62,19 @@ const TodayGoalsPage = () => {
       console.error(error);
       setGoals([]); // Clear goals on error to avoid showing stale data
     }
-    const data = await fetch("http://localhost:3000/api/goals/today-goals", {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-    }).then((res) => res.json());
-    console.log(data.data);
-    setGoals(data.data);
+  //   const data = await fetch("http://localhost:3000/api/goals/today-goals", {
+  //     method: "GET",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       Authorization: `Bearer ${token}`,
+  //     },
+  //   }).then((res) => res.json());
+  //   console.log(data.data);
+  //   setGoals(data.data);
   };
 
-  const handleSave = async () => {
+  const handleSave = async () => { 
+    //updating data on server
     const token = await getToken();
     if (!token) {
       console.error("Authentication token not available.");
@@ -90,7 +91,6 @@ const TodayGoalsPage = () => {
         body: JSON.stringify({ goalText: goal }),
       });
       setGoal(""); // Clear input after successful save
-      fetchGoals(); // Refresh the goals list
     } catch (error) {
       console.error("Failed to save goal:", error);
     }
@@ -130,8 +130,8 @@ const TodayGoalsPage = () => {
   const toggleGoal = async (goalId) => {
     const index = goals.findIndex((goal) => goal._id === goalId);
     // console.log(index);
-    const completed = !goals[index].completed;
-    // setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
+    goals[index].completed = !goals[index].completed;
+    setGoals([...goals]); //to re-render the page so that changes becomes visible on screen
 
 
     //updating the same in server
@@ -144,14 +144,19 @@ const TodayGoalsPage = () => {
     console.log(goal)
 
     try {
-     await fetch(`http://localhost:3000/api/goals/today-goals/completed/${goalId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({ completed: completed }), //no need to pass userId as the _id of goal will remain same
-      }).then((res) => res.json()).then((data) => console.log(data))
+     await fetch(
+       `http://localhost:3000/api/goals/today-goals/completed/${goalId}`,
+       {
+         method: "PATCH",
+         headers: {
+           "Content-Type": "application/json",
+           Authorization: `Bearer ${token}`,
+         },
+         body: JSON.stringify({ completed: goals[index].completed }), //no need to pass userId as the _id of goal will remain same
+       }
+     )
+       .then((res) => res.json())
+       .then((data) => console.log(data));
 
     } catch (error) {
       console.error("Failed to save the changes", error)
@@ -159,7 +164,8 @@ const TodayGoalsPage = () => {
 fetchGoals()
   };
 
-  const handleAdd = () => {
+  const handleAdd = (goalText) => {
+    setGoals(prev => ([...prev, {goalText}]))
     console.log("Add was clicked");
     setGoal("");
     console.log(goals);
@@ -168,7 +174,7 @@ fetchGoals()
   };
 
   const handleEdit = async (id, goal) => {
-    // setGoals(prev => (prev.map((currentGoal) => (currentGoal._id === id) ? goal : currentGoal )))
+    setGoals(prev => (prev.map((currentGoal) => (currentGoal._id === id) ? goal : currentGoal )))
 
     //patching the existing data in DB
     const token = await getToken()
@@ -222,7 +228,7 @@ fetchGoals()
                 if (goal.length >= 5 && e.key === "Enter") handleAdd();
               }}
             />
-            <Button onClick={handleAdd} disabled={goal.length <= 5}>
+            <Button onClick={() => handleAdd(goal)} disabled={goal.length <= 5}>
               <Plus size={16} className="mr-1" />
               Add
             </Button>
@@ -242,10 +248,8 @@ fetchGoals()
           )}
 
           <motion.div layout className="flex gap-2 flex-col">
-            {goals.map((goal) => (
-              <div key={goal._id} className="w-full">
-                <GoalItem goal={goal} />
-              </div>
+            {goals.map(goal => (
+              <GoalItem key={goal._id} goal={goal} />
             ))}
           </motion.div>
         </CardContent>

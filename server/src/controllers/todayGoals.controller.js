@@ -11,13 +11,13 @@ const getTodayGoals = asyncHandler(async (req, res) => {
   const userId = user.userId;
 
   // Fetch all today goals for the user
-  const userDocs = await TodayGoal.find({ userId }); // <-- FIXED
+  const userDocs = await TodayGoal.find({ userId }); //
   // console.log(userDocs)
 
   return res.status(200).json(
     new ApiResponse(
       200,
-      userDocs, // <-- FIXED
+      userDocs, //
       "Today Goals of the user found"
     )
   );
@@ -78,10 +78,10 @@ const deleteGoals = asyncHandler(async (req, res) => {
 });
 
 const editGoals = asyncHandler(async (req, res) => {
-  console.log(req.params._id)
-  console.log(req.body)
+  console.log(req.params._id);
+  console.log(req.body);
   //finding the id and update
-try {
+  try {
     const updatedGoal = await TodayGoal.findOneAndUpdate(
       { _id: req.params._id },
       {
@@ -91,41 +91,38 @@ try {
         new: true,
       }
     );
-  
-    console.log(updatedGoal)
-    if(!updatedGoal){
-      throw new ApiError(404, "Error while updating the goal")
+
+    console.log(updatedGoal);
+    if (!updatedGoal) {
+      throw new ApiError(404, "Error while updating the goal");
     }
-  
-    res.status(200).json(
-      new ApiResponse(200, updatedGoal, "Update successfull")
-    )
-} catch (error) {
-  throw new ApiError(400, "Something went wrong while updating", error)
-}
+
+    res
+      .status(200)
+      .json(new ApiResponse(200, updatedGoal, "Update successfull"));
+  } catch (error) {
+    throw new ApiError(400, "Something went wrong while updating", error);
+  }
 });
 
 const toggleGoals = asyncHandler(async (req, res) => {
-  console.log(req.body)
-    try {
-      const goal = await TodayGoal.findOneAndUpdate(
-        {_id: req.params._id},
-        {$set: req.body},
-        {new: true}
-      )
+  console.log(req.body);
+  try {
+    const goal = await TodayGoal.findOneAndUpdate(
+      { _id: req.params._id },
+      { $set: req.body },
+      { new: true }
+    );
 
-      console.log(goal)
-      if(!goal){
-        throw new ApiError(400, "goal not found")
-      }
-
-      res.status(200).json(
-        new ApiResponse(200, goal, "Toggle successfull")
-      )
-
-    } catch (error) {
-      throw new ApiError(400, "Toggle failed", error)
+    console.log(goal);
+    if (!goal) {
+      throw new ApiError(400, "goal not found");
     }
-})
+
+    res.status(200).json(new ApiResponse(200, goal, "Toggle successfull"));
+  } catch (error) {
+    throw new ApiError(400, "Toggle failed", error);
+  }
+});
 
 export { addTodayGoals, getTodayGoals, deleteGoals, editGoals, toggleGoals };

@@ -13,8 +13,10 @@ app.use(express.json());
 
 //Importing routes
 import todayGoalsRouter from "./routes/goals.route.js";
+import applicationRouter from "./routes/application.route.js";
 
 //Routes declaration
 app.use("/api/goals", todayGoalsRouter)
+app.use("/api/applications", applicationRouter)
 
 export default app;

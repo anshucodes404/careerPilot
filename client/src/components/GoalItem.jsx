@@ -47,7 +47,6 @@ function GoalItem({ goal }) {
             className="cursor-pointer hover:text-green-500"
             onClick={() => {
               updateGoal();
-              setIsEditable((prev) => !prev);
             }}
           />
         ) : (
