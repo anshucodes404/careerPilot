@@ -16,10 +16,10 @@ const GoalsDecidePage = () => {
         </div>
 
         <div className="flex gap-3 pr-10">
-          <Button className={"cursor-pointer"}>
+          <Button className={"cursor-pointer"} asChild>
             <NavLink to={"/today-goals"}>Today's Goals</NavLink>
           </Button>
-          <Button className={"cursor-pointer"}>
+          <Button className={"cursor-pointer"} asChild>
             <NavLink to={"/week-goals"}>Week's Goals</NavLink>
           </Button>
         </div>

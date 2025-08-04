@@ -2,6 +2,10 @@ import mongoose, { Schema } from "mongoose";
 
 const applicationSchema = new Schema(
   {
+    userId: {
+        type: String, //comes from clerk
+        required: true
+    },
     companyName: {
         type: String,
         required: true
