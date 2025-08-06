@@ -10,6 +10,7 @@ import ApplicationsPage from "./pages/ApplicationsPage";
 import TodayGoalsPage from "./pages/TodayGoalsPage";
 import WeeklyGoalsPage from "./pages/WeeklyGoalsPage";
 import ResumePage from "./pages/ResumePage";
+import AiPage from "./pages/AiPage";
 // const profileLoader = async () => {
 //   const res = await fetch("/api/profile");
 //   if (!res.ok) throw new Error("Failed to load profile");
@@ -74,6 +75,14 @@ const router = createBrowserRouter([
           </ProtectedRoutes>
         ),
       },
+      {
+        path: "ai",
+        element: (
+          <ProtectedRoutes>
+            <AiPage/>
+          </ProtectedRoutes>
+        )
+      }
     ],
   },
 ]);

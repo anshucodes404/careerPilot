@@ -1,6 +1,7 @@
 import React from "react";
 import { Button } from "./ui/button";
 import { NavLink } from "react-router-dom";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 const GoalsDecidePage = () => {
   return (
@@ -15,14 +16,16 @@ const GoalsDecidePage = () => {
           </p>
         </div>
 
-        <div className="flex gap-3 pr-10">
-          <Button className={"cursor-pointer"} asChild>
-            <NavLink to={"/today-goals"}>Today's Goals</NavLink>
-          </Button>
-          <Button className={"cursor-pointer"} asChild>
-            <NavLink to={"/week-goals"}>Week's Goals</NavLink>
-          </Button>
-        </div>
+        <Tabs className="w-[400px]">
+          <TabsList>
+            <TabsTrigger value="account">
+              <NavLink to={"/today-goals"}>Today's Goals</NavLink>
+            </TabsTrigger>
+            <TabsTrigger value="password">
+              <NavLink to={"/week-goals"}>Week's Goals</NavLink>
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
       </div>
     </>
   );

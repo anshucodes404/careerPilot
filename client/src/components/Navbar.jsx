@@ -71,6 +71,11 @@ const Navbar = () => {
               <NavLink to={"/resume"}>Resume</NavLink>
             </NavigationMenuLink>
           </NavigationMenuItem>
+          <NavigationMenuItem className={""}>
+            <NavigationMenuLink className="text-gray-800 dark:text-white hover:text-teal-600 dark:hover:text-teal-400">
+              <NavLink to={"/ai"}>🤖</NavLink>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
 

@@ -18,6 +18,7 @@ import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import GoalItem from "../components/GoalItem";
 
+
 const TodayGoalsPage = () => {
 
 
