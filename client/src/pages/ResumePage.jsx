@@ -67,6 +67,7 @@ const ResumePage = () => {
 
       if (res.ok) {
         const data = await res.json()
+        console.log(data.data)
         setUploadStatus({ type: 'success', message: 'Resume uploaded successfully!' })
         setSelectedFile(null)
         if (fileInput.current) fileInput.current.value = ''

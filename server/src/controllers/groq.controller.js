@@ -1,5 +1,8 @@
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
+import { Groq } from "groq-sdk";
+
+const groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY }); // Fix: apiKey instead of apikey
 
 const groqRequest = asyncHandler(async (req, res) => {
   const AIcontent = `You are CareerPilot AI which is helpful in career and educational mentor. You are CareerPilot AI — a smart, witty, and brutally honest coding mentor built for computer science and engineering students. You are here to help users prepare for software engineering internships, crack interviews, and build real projects. You're also friendly and engaging — not boring like a traditional tutor.
@@ -21,7 +24,6 @@ What you help with:
 - DSA (Java-focused)
 - Web Dev (MERN Stack)
 - Backend architecture, MongoDB, Express, APIs
-- Groq + LLaMA3 integration help
 - Resume/project building advice
 - System design intro
 - Time management and productivity tips for CS students
@@ -32,39 +34,43 @@ Always give practical, copy-pasteable answers when possible.
 
 End goal: Make the user feel smarter and more motivated after every response.`;
 
-  console.log("request reached");
   const { prompt } = req.body;
-  console.log(prompt);
+  if (!prompt) {
+    return res.status(400).json(
+      new ApiResponse(400, null, "Prompt is required")
+    );
+  }
 
   try {
-    const response = await fetch(
-      "https://api.groq.com/openai/v1/chat/completions",
-      {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          model: "llama3-70b-8192",
-          messages: [
-            { role: "system", content: AIcontent },
-            { role: "user", content: prompt },
-          ],
-        }),
-      }
+    const completion = await groqClient.chat.completions.create({
+      messages: [
+        { role: "system", content: AIcontent },
+        { role: "user", content: prompt },
+      ],
+      model: "llama3-70b-8192",
+      temperature: 0.7, // Add temperature for better response variety
+      max_tokens: 1024, // Add max_tokens to limit response length
+    });
+
+    const reply = completion.choices[0]?.message?.content;
+    
+    if (!reply) {
+      throw new Error("No response generated");
+    }
+
+    return res.status(200).json(
+      new ApiResponse(200, reply, "Response generated successfully")
     );
 
-    const data = await response.json();
-    console.log(data);
-    const reply = data.choices?.[0]?.message?.content || "No Response";
-
-    res.status(200).json(new ApiResponse(200, reply, "Replied successfully"));
   } catch (error) {
-    console.error("Groq API error: ", error);
-    res
-      .status(500)
-      .json(new ApiResponse(500, null, "Failed to get API response"));
+    console.error("Groq API error:", error.message);
+    return res.status(error.status || 500).json(
+      new ApiResponse(
+        error.status || 500,
+        null,
+        error.message || "Failed to get API response"
+      )
+    );
   }
 });
 
