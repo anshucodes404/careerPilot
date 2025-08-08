@@ -4,14 +4,23 @@ import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select } from "../components/ui/select";
-import { Badge } from "../components/ui/badge";
 import { Plus, Search, Filter } from "lucide-react";
+import AddApplication from '../components/addApplication';
 
 const ApplicationPage = () => {
-  const [applications, setApplications] = useState([]);
+  const [applications, setApplications] = useState([
+    {
+      company: "Google",
+      role: "SDE",
+      status: "Passed",
+      location: "Hyderabad",
+      tags: ["SDE", "Google", "Backend"]
+    },
+  ]);
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   // Filter applications based on search term and status
   const filteredApplications = applications.filter((app) => {
@@ -31,6 +40,11 @@ const ApplicationPage = () => {
     rejected: applications.filter((app) => app.status === "Rejected").length,
   };
 
+  const handleAddApplication = (formData) => {
+    // Add your logic to save the application
+    setApplications(prev => [...prev, { ...formData, id: Date.now() }])
+  }
+
   return (
     <div className="min-h-screen">
       {/* Header Section */}
@@ -46,7 +60,7 @@ const ApplicationPage = () => {
               </p>
             </div>
             <div className="mt-4 flex md:mt-0 md:ml-4">
-              <Button className="ml-3">
+              <Button className="ml-3" onClick={() => setIsAddModalOpen(true)}>
                 <Plus className="w-4 h-4 mr-2" />
                 New Application
               </Button>
@@ -166,6 +180,12 @@ const ApplicationPage = () => {
             </>
           )}
         </AnimatePresence>
+
+        <AddApplication
+          isOpen={isAddModalOpen}
+          onClose={() => setIsAddModalOpen(false)}
+          onSubmit={handleAddApplication}
+        />
       </main>
     </div>
   );
