@@ -132,7 +132,7 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
             <Button variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Add Application</Button>
+            <Button onClick={handleSubmit} type="submit">Add Application</Button>
           </div>
         </form>
       </DialogContent>

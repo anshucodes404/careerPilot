@@ -9,8 +9,8 @@ applicationRouter.use(requireAuth())
 applicationRouter.use(registerUser)
 
 applicationRouter.route("/get").get(getApplications)
-applicationRouter.route("/get").post(postApplications)
-applicationRouter.route("/get").delete(deleteApplications)
-applicationRouter.route("/get").patch(patchApplications)
+applicationRouter.route("/post").post(postApplications);
+applicationRouter.route("/delete").delete(deleteApplications)
+applicationRouter.route("/patch").patch(patchApplications)
 
 export default applicationRouter

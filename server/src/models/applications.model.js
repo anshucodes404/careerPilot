@@ -3,35 +3,40 @@ import mongoose, { Schema } from "mongoose";
 const applicationSchema = new Schema(
   {
     userId: {
-        type: String, //comes from clerk
-        required: true
+      type: String, //comes from clerk
+      required: true,
     },
-    companyName: {
-        type: String,
-        required: true
+    company: {
+      type: String,
+      required: true,
     },
     role: {
-        type: String,
-        required: true
+      type: String,
+      required: true,
     },
-    interviewDate: "",
-    note: {
-        type: String,
+    location: {
+      type: String,
     },
+    appliedDate: {
+      type: Date,
+      required: true,
+    },
+    interviewDate: {
+      type: Date,
+    },
+    notes: {
+      type: String,
+    },
+    tags: [String],
     resumeLink: {
-        type: String
+      type: String,
     },
-    success: {
-        type: Boolean,
-        default: false
-    },
-    isPending: {
-        type: Boolean,
-        default: true
+    status: {
+      type: String,
+      default: "Applied",
     },
   },
   { timestamps: true }
 );
 
-
-export const Application = mongoose.model("Application", applicationSchema)
+export const Application = mongoose.model("Application", applicationSchema);

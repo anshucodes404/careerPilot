@@ -5,18 +5,12 @@ import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Select } from "../components/ui/select";
 import { Plus, Search, Filter } from "lucide-react";
-import AddApplication from '../components/addApplication';
+import AddApplication from "../components/addApplication";
+import { useAuth } from "@clerk/clerk-react";
 
 const ApplicationPage = () => {
-  const [applications, setApplications] = useState([
-    {
-      company: "Google",
-      role: "SDE",
-      status: "Passed",
-      location: "Hyderabad",
-      tags: ["SDE", "Google", "Backend"]
-    },
-  ]);
+  const [applications, setApplications] = useState([]);
+  const { getToken } = useAuth();
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -40,10 +34,58 @@ const ApplicationPage = () => {
     rejected: applications.filter((app) => app.status === "Rejected").length,
   };
 
-  const handleAddApplication = (formData) => {
+
+  useEffect(() => {
+    getApplications()
+  },[])
+
+  const getApplications = async () => {
+    try {
+      const token = await getToken();
+      const res = await fetch("http://localhost:3000/api/applications/get",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      const applications = await res.json()
+      console.log(applications)
+      console.log(applications.data)
+      setApplications(applications.data);
+
+    } catch (error) {
+
+    }
+  };
+
+  const handleAddApplication = async (formData) => {
     // Add your logic to save the application
-    setApplications(prev => [...prev, { ...formData, id: Date.now() }])
-  }
+    setApplications((prev) => [...prev, { ...formData, id: Date.now() }]);
+    console.log(formData);
+    try {
+      console.log("Try block");
+      const token = await getToken();
+      const response = await fetch(
+        "http://localhost:3000/api/applications/post",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(formData),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+    } catch (error) {
+      console.error("Application saving falied");
+    }
+  };
 
   return (
     <div className="min-h-screen">
@@ -117,7 +159,7 @@ const ApplicationPage = () => {
             </div>
             <Select
               value={statusFilter}
-              onValueChange={setStatusFilter}
+              onValueChange={(value) => setStatusFilter(e.target.value)}
               className="w-full sm:w-[200px]"
             >
               <option value="all">All Status</option>
