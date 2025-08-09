@@ -130,3 +130,7 @@
   display: none;
   /* Chrome, Safari */
 }
+
+.z-navbar{
+  z-index: 9999;
+}

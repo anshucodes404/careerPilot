@@ -57,28 +57,6 @@ const CardAppUI = ({ app, onClick }) => {
           </div>
         </div>
       </CardHeader>
-
-      <CardContent>
-        {app.notes && (
-          <p className="text-sm text-neutral-600 dark:text-neutral-400 line-clamp-2">
-            {app.notes}
-          </p>
-        )}
-
-        {app.tags && app.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-3">
-            {app.tags.map((tag, index) => (
-              <Badge
-                key={index}
-                variant="outline"
-                className="bg-neutral-100 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300"
-              >
-                {tag}
-              </Badge>
-            ))}
-          </div>
-        )}
-      </CardContent>
     </Card>
   );
 };

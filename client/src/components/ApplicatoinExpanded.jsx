@@ -16,14 +16,15 @@ import { Button } from "./ui/button";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import ApplicationExpandedEditable from "./ApplicationExpandedEditable";
+import { useApplication } from "../context/applicationContext";
 
-const ApplicationExpanded = ({ application, onClose }) => {
+const ApplicationExpanded = ({ application, onDelete }) => {
   const [isEditable, setIsEditable] = useState(false);
   const formattedDate = application?.appliedDate
     ? new Date(application.appliedDate).toLocaleDateString()
     : "Not specified";
 
-  const handleDelete = () => {};
+  const { deleteApplication } = useApplication();
 
   return (
     <>
@@ -97,21 +98,21 @@ const ApplicationExpanded = ({ application, onClose }) => {
           )}
 
           {/* Contact Information */}
-          {(application?.contactName || application?.contactEmail) && (
+          {(application?.Name || application?.Email) && (
             <div className="space-y-2">
               <h3 className="text-lg font-semibold text-black dark:text-white flex items-center">
                 <Phone className="h-4 w-4 mr-2" />
                 Contact Information
               </h3>
               <div className="bg-neutral-50 dark:bg-neutral-800 p-4 rounded-lg space-y-2">
-                {application?.contactName && (
+                {application?.Name && (
                   <p className="text-neutral-600 dark:text-neutral-400">
-                    Contact: {application.contactName}
+                    Contact: {application.contact}
                   </p>
                 )}
                 {application?.contactEmail && (
                   <p className="text-neutral-600 dark:text-neutral-400">
-                    Email: {application.contactEmail}
+                    Email: {application.Email}
                   </p>
                 )}
               </div>
@@ -119,7 +120,7 @@ const ApplicationExpanded = ({ application, onClose }) => {
           )}
 
           {/* Timeline */}
-          {application?.timeline && (
+          {/* {application?.timeline && (
             <div className="space-y-4">
               <h3 className="text-lg font-semibold text-black dark:text-white">
                 Application Timeline
@@ -144,11 +145,17 @@ const ApplicationExpanded = ({ application, onClose }) => {
                 ))}
               </div>
             </div>
-          )}
+          )} */}
 
           {/* Buttons for edit and delete */}
           <div className="flex gap-2 justify-end">
-            <Button onClick={handleDelete} className={"dark:bg-red-600"}>
+            <Button
+            variant="destructive"
+              onClick={() => {
+                onDelete(application);
+              }}
+              className={"dark:bg-red-600"}
+            >
               Delete
             </Button>
             <Button onClick={() => setIsEditable(true)}>Edit</Button>

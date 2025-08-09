@@ -1,7 +1,14 @@
-import React from 'react';
+import React from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { Calendar, CalendarClock, MapPin, Building, Clock, FileText } from "lucide-react";
+import {
+  Calendar,
+  CalendarClock,
+  MapPin,
+  Building,
+  Clock,
+  FileText,
+} from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
@@ -14,9 +21,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
+import { useApplication } from "../context/applicationContext";
 
-const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
+const ApplicationExpandedEditable = ({ application, onClose }) => {
   const [formData, setFormData] = React.useState({
+    _id: application?._id || "",
     company: application?.company || "",
     role: application?.role || "",
     location: application?.location || "",
@@ -24,13 +33,18 @@ const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
     mode: application?.mode || "Online",
     resume: application?.resume || "v1",
     notes: application?.notes || "",
-    appliedDate: application?.appliedDate || new Date().toISOString().split('T')[0],
-    description: application?.description || ""
+    appliedDate:
+      application?.appliedDate || new Date().toISOString().split("T")[0],
+    description: application?.description || "",
   });
 
-  const handleSubmit = (e) => {
+  const { editApplication, setExpandedIdx, setClickedIdx } = useApplication();
+
+  const onSave = (e) => {
     e.preventDefault();
-    onSave(formData);
+    editApplication(formData);
+    setExpandedIdx(null);
+    setClickedIdx(null);
   };
 
   return (
@@ -44,7 +58,7 @@ const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
       <Separator className="bg-neutral-200 dark:bg-neutral-800" />
 
       <CardContent className="pt-6">
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={onSave} className="space-y-6">
           {/* Main Information */}
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
@@ -133,7 +147,7 @@ const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Resume Version</Label>
+              <Label>Resume</Label>
               <Select
                 value={formData.resume}
                 onValueChange={(value) =>
@@ -149,18 +163,6 @@ const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
                 </SelectContent>
               </Select>
             </div>
-          </div>
-
-          {/* Description and Notes */}
-          <div className="space-y-2">
-            <Label>Job Description</Label>
-            <Textarea
-              value={formData.description}
-              onChange={(e) =>
-                setFormData({ ...formData, description: e.target.value })
-              }
-              className="bg-neutral-50 dark:bg-neutral-800 min-h-[100px]"
-            />
           </div>
 
           <div className="space-y-2">
@@ -179,7 +181,9 @@ const ApplicationExpandedEditable = ({ application, onClose, onSave }) => {
             <Button variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit" onClick={onSave}>
+              Save Changes
+            </Button>
           </div>
         </form>
       </CardContent>

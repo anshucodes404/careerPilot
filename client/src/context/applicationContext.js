@@ -1,19 +1,25 @@
 import { createContext, useContext } from "react";
 
 const applicationContext = createContext({
-  apllications: [
+  applications: [
     {
       _id: 1,
-      companyName: "Google",
-      role: "SDE-2",
+      company: "",
+      role: "",
+      location: "",
+      status: "",
+      mode: "",
+      resume: "",
+      notes: "",
+      appliedDate: "",
       interviewDate: "",
-      note: "",
-      resumeLink: "",
-      success: true,
-      isPending: false,
     },
   ],
-  createApplication: () => {},
+  expandedIdx: null,
+  setExpandedIdx: () => {},
+  clickedIdx: null,
+  setClickedIdx: () => {},
+  saveApplication: () => {},
   editApplication: () => {},
   deleteApplication: () => {},
 });

@@ -17,8 +17,12 @@ import {
   SelectValue,
 } from "./ui/select"
 import { Textarea } from "./ui/textarea"
+import { useApplication } from '../context/applicationContext'
 
-const AddApplication = ({ isOpen, onClose, onSubmit }) => {
+const AddApplication = ({ isOpen, onClose }) => {
+
+  const {saveApplication} = useApplication()
+
   const [formData, setFormData] = useState({
     company: "",
     role: "",
@@ -27,12 +31,13 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
     mode: "Online",
     resume: "v1",
     notes: "",
-    appliedDate: new Date().toISOString().split('T')[0]
+    appliedDate: new Date().toISOString().split('T')[0],
+    interviewDate: new Date().toISOString().split('T')[0]
   })
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    onSubmit(formData)
+    saveApplication(formData)
     setFormData({
       company: "",
       role: "",
