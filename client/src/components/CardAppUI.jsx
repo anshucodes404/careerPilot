@@ -3,7 +3,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
 import { Calendar, MapPin, Building } from "lucide-react";
 
-const getStatusStyles = (status) => {
+export const getStatusStyles = (status) => {
   const baseStyles = "absolute top-4 right-4";
   switch (status?.toLowerCase()) {
     case "passed":

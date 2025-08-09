@@ -23,7 +23,7 @@ const getApplications = asyncHandler(async (req, res) => {
 const postApplications = asyncHandler(async(req, res) => {
     console.log(req.body)
     console.log("Post request reached")
-    const {company, role, location, status, notes, appliedDate, interviewDate, tags} = req.body;
+    const {company, role, location, status, notes, appliedDate, interviewDate} = req.body;
     const user = req.auth();
     const userId = user.userId;
 
@@ -31,7 +31,7 @@ const postApplications = asyncHandler(async(req, res) => {
         throw new ApiError(402, "Company, role, applied Date is required")
     }
 
-    const application = await Application.create({userId, company, role, location, status, notes, appliedDate, interviewDate, tags})
+    const application = await Application.create({userId, company, role, location, status, notes, appliedDate, interviewDate})
 
     if(!application){
         throw new ApiError(500, "Error occured while saving the application form")

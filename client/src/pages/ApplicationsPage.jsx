@@ -7,6 +7,7 @@ import { Select } from "../components/ui/select";
 import { Plus, Search, Filter } from "lucide-react";
 import AddApplication from "../components/addApplication";
 import { useAuth } from "@clerk/clerk-react";
+import ApplicationExpanded from "../components/ApplicatoinExpanded";
 
 const ApplicationPage = () => {
   const [applications, setApplications] = useState([]);
@@ -213,9 +214,8 @@ const ApplicationPage = () => {
                 exit={{ scale: 0.8, opacity: 0 }}
                 transition={{ type: "spring", damping: 25, stiffness: 300 }}
               >
-                <CardAppUI
-                  app={applications[expandedIdx]}
-                  expanded
+                <ApplicationExpanded
+                  application={applications[expandedIdx]}
                   onClose={() => setExpandedIdx(null)}
                 />
               </motion.div>

@@ -27,7 +27,6 @@ const applicationSchema = new Schema(
     notes: {
       type: String,
     },
-    tags: [String],
     resumeLink: {
       type: String,
     },

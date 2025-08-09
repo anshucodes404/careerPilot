@@ -24,6 +24,8 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
     role: "",
     location: "",
     status: "Applied",
+    mode: "Online",
+    resume: "v1",
     notes: "",
     appliedDate: new Date().toISOString().split('T')[0]
   })
@@ -36,9 +38,11 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
       role: "",
       location: "",
       status: "Applied",
+      mode: "Online",
+      resume: "v1",
       notes: "",
-      appliedDate: new Date().toISOString().split('T')[0]
-    })
+      appliedDate: new Date().toISOString().split("T")[0],
+    });
     onClose()
   }
 
@@ -58,7 +62,9 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
               id="company"
               required
               value={formData.company}
-              onChange={(e) => setFormData({ ...formData, company: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, company: e.target.value })
+              }
               className="bg-neutral-50 dark:bg-neutral-800"
               placeholder="Enter company name"
             />
@@ -70,7 +76,9 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
               id="role"
               required
               value={formData.role}
-              onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, role: e.target.value })
+              }
               className="bg-neutral-50 dark:bg-neutral-800"
               placeholder="Enter job role"
             />
@@ -81,28 +89,68 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
             <Input
               id="location"
               value={formData.location}
-              onChange={(e) => setFormData({ ...formData, location: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, location: e.target.value })
+              }
               className="bg-neutral-50 dark:bg-neutral-800"
               placeholder="Enter job location"
             />
           </div>
 
-          <div className="space-y-2">
-            <Label htmlFor="status">Application Status</Label>
-            <Select
-              value={formData.status}
-              onValueChange={(value) => setFormData({ ...formData, status: value })}
-            >
-              <SelectTrigger className="bg-neutral-50 dark:bg-neutral-800">
-                <SelectValue placeholder="Select status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="Applied">Applied</SelectItem>
-                <SelectItem value="Interviewing">Interviewing</SelectItem>
-                <SelectItem value="Passed">Passed</SelectItem>
-                <SelectItem value="Rejected">Rejected</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="flex justify-between">
+            <div className="space-y-2">
+              <Label htmlFor="status">Application Status</Label>
+              <Select
+                value={formData.status}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, status: value })
+                }
+              >
+                <SelectTrigger className="bg-neutral-50 dark:bg-neutral-800">
+                  <SelectValue placeholder="Select status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Applied">Applied</SelectItem>
+                  <SelectItem value="Interviewing">Interviewing</SelectItem>
+                  <SelectItem value="Passed">Passed</SelectItem>
+                  <SelectItem value="Rejected">Rejected</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="resume">Resume</Label>
+              <Select
+                value={formData.resume}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, resume: value })
+                }
+              >
+                <SelectTrigger className="bg-neutral-50 dark:bg-neutral-800">
+                  <SelectValue placeholder="Select resume" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="v1">v1</SelectItem>
+                  <SelectItem value="v2">v2</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="mode">Mode</Label>
+              <Select
+                value={formData.mode}
+                onValueChange={(value) =>
+                  setFormData({ ...formData, mode: value })
+                }
+              >
+                <SelectTrigger className="bg-neutral-50 dark:bg-neutral-800">
+                  <SelectValue placeholder="Select mode" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="Online">Online</SelectItem>
+                  <SelectItem value="Offline">Offline</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
 
           <div className="space-y-2">
@@ -111,7 +159,9 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
               id="appliedDate"
               type="date"
               value={formData.appliedDate}
-              onChange={(e) => setFormData({ ...formData, appliedDate: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, appliedDate: e.target.value })
+              }
               className="bg-neutral-50 dark:bg-neutral-800"
             />
           </div>
@@ -121,7 +171,9 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
             <Textarea
               id="notes"
               value={formData.notes}
-              onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              onChange={(e) =>
+                setFormData({ ...formData, notes: e.target.value })
+              }
               className="bg-neutral-50 dark:bg-neutral-800"
               placeholder="Add any notes about the application"
               rows={3}
@@ -132,12 +184,14 @@ const AddApplication = ({ isOpen, onClose, onSubmit }) => {
             <Button variant="outline" type="button" onClick={onClose}>
               Cancel
             </Button>
-            <Button onClick={handleSubmit} type="submit">Add Application</Button>
+            <Button onClick={handleSubmit} type="submit">
+              Add Application
+            </Button>
           </div>
         </form>
       </DialogContent>
     </Dialog>
-  )
+  );
 }
 
 export default AddApplication
