@@ -108,7 +108,7 @@ const HomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-gray-800 text-white py-8 text-center">
+      <footer className="text-white py-8 text-center">
         <p className="text-sm">&copy; {new Date().getFullYear()} CareerCopilot. All rights reserved.</p>
       </footer>
     </div>

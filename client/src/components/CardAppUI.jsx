@@ -4,7 +4,7 @@ import { Badge } from "./ui/badge";
 import { Calendar, MapPin, Building } from "lucide-react";
 
 export const getStatusStyles = (status) => {
-  const baseStyles = "absolute top-4 right-4";
+  const baseStyles = "absolute top-7 right-4";
   switch (status?.toLowerCase()) {
     case "passed":
       return `${baseStyles} bg-green-600 dark:bg-green-500 hover:bg-green-700`;

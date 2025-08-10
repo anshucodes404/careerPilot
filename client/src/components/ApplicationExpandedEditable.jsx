@@ -8,6 +8,7 @@ import {
   Building,
   Clock,
   FileText,
+  X
 } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { Input } from "./ui/input";
@@ -48,12 +49,19 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
   };
 
   return (
-    <Card className="w-[90vw] h-[70vh] overflow-y-auto scrollbar-hidden max-w-4xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+    <Card className="w-[90vw] h-[70vh] overflow-y-auto relative scrollbar-hidden max-w-4xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
       <CardHeader className="relative pb-2">
         <CardTitle className="text-2xl font-bold text-black dark:text-white">
           Edit Application
         </CardTitle>
       </CardHeader>
+
+      <button
+        className="absolute top-2 right-4 dark:text-neutral-400 dark:hover:text-white text-neutral-600 hover:text-black"
+        onClick={onClose}
+      >
+        <X />
+      </button>
 
       <Separator className="bg-neutral-200 dark:bg-neutral-800" />
 
@@ -62,7 +70,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
           {/* Main Information */}
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Company Name</Label>
+              <div className="flex gap-1">
+                <Building className="h-4 w-4" />
+                <Label>Company Name</Label>
+              </div>
               <Input
                 value={formData.company}
                 onChange={(e) =>
@@ -72,7 +83,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
               />
             </div>
             <div className="space-y-2">
-              <Label>Role</Label>
+              <div className="flex gap-1">
+                <Building className="h-4 w-4" />
+                <Label>Role</Label>
+              </div>
               <Input
                 value={formData.role}
                 onChange={(e) =>
@@ -86,7 +100,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
           {/* Location and Dates */}
           <div className="grid grid-cols-3 gap-6">
             <div className="space-y-2">
-              <Label>Location</Label>
+              <div className="flex gap-1">
+                <MapPin className="h-4 w-4" />
+                <Label>Location</Label>
+              </div>
               <Input
                 value={formData.location}
                 onChange={(e) =>
@@ -96,7 +113,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
               />
             </div>
             <div className="space-y-2">
-              <Label>Applied Date</Label>
+              <div className="flex gap-1">
+                <Calendar className="h-4 w-4" />
+                <Label>Applied Date</Label>
+              </div>
               <Input
                 type="date"
                 value={formData.appliedDate}
@@ -107,7 +127,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
               />
             </div>
             <div className="space-y-2">
-              <Label>Status</Label>
+              <div className="flex gap-1">
+                <Building className="h-4 w-4" />
+                <Label>Status</Label>
+              </div>
               <Select
                 value={formData.status}
                 onValueChange={(value) =>
@@ -130,7 +153,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
           {/* Additional Details */}
           <div className="grid grid-cols-2 gap-6">
             <div className="space-y-2">
-              <Label>Mode</Label>
+              <div className="flex gap-1">
+                <Building className="h-4 w-4" />
+                <Label>Mode</Label>
+              </div>
               <Select
                 value={formData.mode}
                 onValueChange={(value) =>
@@ -147,7 +173,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
               </Select>
             </div>
             <div className="space-y-2">
-              <Label>Resume</Label>
+              <div className="flex gap-1">
+                <Building className="h-4 w-4" />
+                <Label>Resume</Label>
+              </div>
               <Select
                 value={formData.resume}
                 onValueChange={(value) =>
@@ -166,7 +195,10 @@ const ApplicationExpandedEditable = ({ application, onClose }) => {
           </div>
 
           <div className="space-y-2">
-            <Label>Notes</Label>
+            <div className="flex gap-1">
+              <FileText className="h-4 w-4" />
+              <Label>Notes</Label>
+            </div>
             <Textarea
               value={formData.notes}
               onChange={(e) =>

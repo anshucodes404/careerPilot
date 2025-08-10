@@ -7,10 +7,8 @@ import { Menu, Sun, Moon } from "lucide-react";
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
 import {
-  SignedIn,
   SignedOut,
   SignInButton,
-  UserButton,
 } from "@clerk/clerk-react";
 import {
   NavigationMenu,
@@ -91,10 +89,7 @@ const Navbar = () => {
             <Button variant="ghost">Login</Button>
           </SignInButton>
         </SignedOut>
-        <SignedIn>
-          <UserButton />
-        </SignedIn>
-        <Button variant="default">Get Started</Button>
+        
         <ModeToggle />
       </motion.div>
 
@@ -126,13 +121,6 @@ const Navbar = () => {
                 </Button>
               </SignInButton>
             </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-
-            <Button variant="default" className="w-full">
-              Get Started
-            </Button>
           </motion.div>
         )}
       </AnimatePresence>

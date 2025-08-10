@@ -300,6 +300,7 @@ const ApplicationPage = () => {
                       setExpandedIdx(null);
                       setIsDeleteDialogOpen(true);
                     }}
+                    onClose={() => setExpandedIdx(null)}
                   />
                 </motion.div>
               </>

@@ -9,6 +9,7 @@ import {
   Clock,
   FileText,
   Phone,
+  X
 } from "lucide-react";
 import { Separator } from "./ui/separator";
 import { getStatusStyles } from "./CardAppUI";
@@ -18,17 +19,15 @@ import { AnimatePresence, motion } from "framer-motion";
 import ApplicationExpandedEditable from "./ApplicationExpandedEditable";
 import { useApplication } from "../context/applicationContext";
 
-const ApplicationExpanded = ({ application, onDelete }) => {
+const ApplicationExpanded = ({ application, onDelete, onClose }) => {
   const [isEditable, setIsEditable] = useState(false);
   const formattedDate = application?.appliedDate
     ? new Date(application.appliedDate).toLocaleDateString()
     : "Not specified";
 
-  const { deleteApplication } = useApplication();
-
   return (
     <>
-      <Card className="w-[90vw] max-w-3xl bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+      <Card className="w-[90vw] max-w-3xl relative bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
         <CardHeader className="relative pb-2">
           <div className="flex items-start justify-between">
             <div>
@@ -44,6 +43,13 @@ const ApplicationExpanded = ({ application, onDelete }) => {
             </Badge>
           </div>
         </CardHeader>
+
+        <button 
+        className="absolute top-2 right-4 dark:text-neutral-400 dark:hover:text-white text-neutral-600 hover:text-black"
+        onClick={onClose}
+        >
+          <X />
+        </button>
 
         <Separator className="bg-neutral-200 dark:bg-neutral-800" />
 
@@ -150,7 +156,7 @@ const ApplicationExpanded = ({ application, onDelete }) => {
           {/* Buttons for edit and delete */}
           <div className="flex gap-2 justify-end">
             <Button
-            variant="destructive"
+              variant="destructive"
               onClick={() => {
                 onDelete(application);
               }}
@@ -162,7 +168,6 @@ const ApplicationExpanded = ({ application, onDelete }) => {
           </div>
         </CardContent>
       </Card>
-
       {/* after clicking on edit button editable window opens */}
       <AnimatePresence>
         {isEditable && (
