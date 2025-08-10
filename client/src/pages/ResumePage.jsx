@@ -4,8 +4,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../co
 import { Input } from '../components/ui/input'
 import { Badge } from '../components/ui/badge'
 import { useAuth } from "@clerk/clerk-react";
+import { useUrl } from '../context/urlContext'
+
 
 const ResumePage = () => {
+  const {url} = useUrl()
   const { getToken } = useAuth()
   const fileInput = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
@@ -57,7 +60,7 @@ const ResumePage = () => {
       const formData = new FormData()
       formData.append("resume", selectedFile)
 
-      const res = await fetch("http://localhost:3000/api/resumes/upload", {
+      const res = await fetch(`${url}/api/resumes/upload`, {
         method: "POST",
         headers: {
           Authorization: `Bearer ${token}`,

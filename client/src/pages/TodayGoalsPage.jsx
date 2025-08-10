@@ -17,11 +17,13 @@ import { useState } from "react";
 import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import GoalItem from "../components/GoalItem";
+import { useUrl } from "../context/urlContext";
 
 
 const TodayGoalsPage = () => {
 
 
+  const {url} = useUrl()
   //need to refactor fetchGoals b/c it  is causing problem in optimisation
 
   const [goals, setGoals] = useState([]);
@@ -42,7 +44,7 @@ const TodayGoalsPage = () => {
     }
     try {
       const response = await fetch(
-        "http://localhost:3000/api/goals/today-goals",
+        `${url}/api/goals/today-goals`,
         {
           method: "GET",
           headers: {
@@ -83,7 +85,7 @@ const TodayGoalsPage = () => {
     }
 
     try {
-      await fetch("http://localhost:3000/api/goals/today-goals", {
+      await fetch(`${url}/api/goals/today-goals`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -111,7 +113,7 @@ const TodayGoalsPage = () => {
     }
 
     try {
-      await fetch("http://localhost:3000/api/goals/today-goals", {
+      await fetch(`${url}/api/goals/today-goals`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
@@ -145,17 +147,14 @@ const TodayGoalsPage = () => {
     console.log(goal)
 
     try {
-     await fetch(
-       `http://localhost:3000/api/goals/today-goals/completed/${goalId}`,
-       {
-         method: "PATCH",
-         headers: {
-           "Content-Type": "application/json",
-           Authorization: `Bearer ${token}`,
-         },
-         body: JSON.stringify({ completed: goals[index].completed }), //no need to pass userId as the _id of goal will remain same
-       }
-     )
+     await fetch(`${url}/api/goals/today-goals/completed/${goalId}`, {
+       method: "PATCH",
+       headers: {
+         "Content-Type": "application/json",
+         Authorization: `Bearer ${token}`,
+       },
+       body: JSON.stringify({ completed: goals[index].completed }), //no need to pass userId as the _id of goal will remain same
+     })
        .then((res) => res.json())
        .then((data) => console.log(data));
 

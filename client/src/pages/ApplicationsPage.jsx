@@ -10,8 +10,11 @@ import { useAuth } from "@clerk/clerk-react";
 import ApplicationExpanded from "../components/ApplicatoinExpanded";
 import { ApplicationProvider } from "../context/applicationContext";
 import AlertDialogBox from "../components/AlertDialogBox";
+import { useUrl } from "../context/urlContext";
+
 
 const ApplicationPage = () => {
+  const {url} = useUrl()
   const [applications, setApplications] = useState([]);
   const { getToken } = useAuth();
   const [expandedIdx, setExpandedIdx] = useState(null);
@@ -47,7 +50,7 @@ const ApplicationPage = () => {
   const getApplications = async () => {
     try {
       const token = await getToken();
-      const res = await fetch("http://localhost:3000/api/applications/get", {
+      const res = await fetch(`${url}/api/applications/get`, {
         method: "GET",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -69,7 +72,7 @@ const ApplicationPage = () => {
       console.log("Try block");
       const token = await getToken();
       const response = await fetch(
-        "http://localhost:3000/api/applications/post",
+        `${url}/api/applications/post`,
         {
           method: "POST",
           headers: {
@@ -94,7 +97,7 @@ const ApplicationPage = () => {
       setExpandedIdx(null);
       const token = await getToken();
       const response = await fetch(
-        `http://localhost:3000/api/applications/put/${formData._id}`,
+        `${url}/api/applications/put/${formData._id}`,
         {
           method: "PUT",
           headers: {
@@ -123,7 +126,7 @@ const ApplicationPage = () => {
     try {
       const token = await getToken();
       const response = await fetch(
-        `http://localhost:3000/api/applications/delete/${formData._id}`,
+        `${url}/api/applications/delete/${formData._id}`,
         {
           method: "DELETE",
           headers: {
