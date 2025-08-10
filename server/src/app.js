@@ -21,6 +21,24 @@ import applicationRouter from "./routes/application.route.js";
 import resumeRouter from "./routes/resume.route.js";
 import groqRouter from "./routes/groq.route.js";
 
+// Wake-up endpoint to prevent sleep mode
+app.get("/wake", (req, res) => {
+  res.json({ 
+    message: "Server is awake!", 
+    timestamp: new Date().toISOString(),
+    status: "active"
+  });
+});
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "healthy", 
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
+
 //Routes declaration
 app.use("/api/goals", todayGoalsRouter)
 app.use("/api/applications", applicationRouter)
