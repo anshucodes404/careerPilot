@@ -51,6 +51,7 @@ const clientDistPath = path.resolve(__dirname, "../../client/dist");
 if (fs.existsSync(clientDistPath)) {
   app.use(express.static(clientDistPath));
 
+
   // Catch-all handler: send back React's index.html file for any non-API routes
   // Using a regex avoids the path-to-regexp v6 "*" parsing error in Express 5
   app.get(/^\/(?!api).*/, (req, res) => {
