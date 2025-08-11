@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useUser } from '@clerk/clerk-react'
 import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
 import { Badge } from "../components/ui/badge"
-import { Button } from "../components/ui/button"
+
 
 import { Separator } from "../components/ui/separator"
 import { 
@@ -20,23 +20,9 @@ import {
   Phone
 } from 'lucide-react'
 import { SignedIn, UserButton } from '@clerk/clerk-react'
-import { Input } from "../components/ui/input";
-import { Label } from "../components/ui/label";
-import { Textarea } from "../components/ui/textarea";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "../components/ui/dialog";
+import EditProfile from '../components/EditProfile'
+import { Button } from '../components/ui/button'
+
 
 const ProfilePage = () => {
 
@@ -57,34 +43,8 @@ const ProfilePage = () => {
     currentGoal: 'Cracking Internship by Dec 2025'
   })
 
-  const [editForm, setEditForm] = useState(profileData)
 
-  const handleInputChange = (field, value) => {
-    setEditForm(prev => ({
-      ...prev,
-      [field]: value
-    }))
-  }
 
-  const handleSocialLinkChange = (platform, value) => {
-    setEditForm(prev => ({
-      ...prev,
-      socialLinks: {
-        ...prev.socialLinks,
-        [platform]: value
-      }
-    }))
-  }
-
-  const handleSave = () => {
-    setProfileData(editForm)
-    setIsEditing(false)
-  }
-
-  const handleCancel = () => {
-    setEditForm(profileData)
-    setIsEditing(false)
-  }
 
   const calculateProfileCompleteness = () => {
     const fields = [
@@ -107,7 +67,7 @@ const ProfilePage = () => {
   const profileCompleteness = calculateProfileCompleteness()
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800">
+    <div className="min-h-screen">
       {/* Background Banner */}
       <div className="relative h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
         <div className="absolute inset-0 bg-black/20"></div>
@@ -122,9 +82,6 @@ const ProfilePage = () => {
                 />
               </div>
               <div className="mb-2">
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
                 <h1 className="text-3xl font-bold text-white mb-1">
                   {user?.firstName} {user?.lastName}
                 </h1>
@@ -135,209 +92,32 @@ const ProfilePage = () => {
             </div>
             <div className="flex items-center space-x-2">
               {user?.primaryEmailAddress?.verified && (
-                <Badge className="bg-green-500 hover:bg-green-600 text-white border-0">
+                <Badge className="bg-green-500 hover:bg-green-600 text-white">
                   <CheckCircle className="w-4 h-4 mr-1" />
                   Verified
                 </Badge>
               )}
 
-              <Dialog open={isEditing} onOpenChange={setIsEditing}>
-                <DialogTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="bg-white/90 hover:bg-white text-slate-800 border-white/20"
-                  >
-                    <Edit3 className="w-4 h-4 mr-2" />
-                    Edit Profile
-                  </Button>
-                </DialogTrigger>
-                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto scrollbar-hidden">
-                  <DialogHeader>
-                    <DialogTitle>Edit Profile</DialogTitle>
-                  </DialogHeader>
-                  <div className="space-y-6">
-                    {/* Location */}
-                    <div>
-                      <Label htmlFor="location">Location</Label>
-                      <Input
-                        id="location"
-                        value={editForm.location}
-                        onChange={(e) =>
-                          handleInputChange("location", e.target.value)
-                        }
-                        placeholder="City, Country"
-                      />
-                    </div>
+              <div className="absolute">
+                <SignedIn>
+                  <UserButton />
+                </SignedIn>
+              </div>
 
-                    {/* Preferred Roles */}
-                    <div>
-                      <Label>Preferred Job Roles</Label>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {editForm.preferredRoles.map((role, index) => (
-                          <Badge
-                            key={index}
-                            variant="secondary"
-                            className="cursor-pointer"
-                          >
-                            {role}
-                          </Badge>
-                        ))}
-                      </div>
-                      <Input
-                        className="mt-2"
-                        placeholder="Add new role (press Enter)"
-                        onKeyPress={(e) => {
-                          if (e.key === "Enter" && e.target.value.trim()) {
-                            handleInputChange("preferredRoles", [
-                              ...editForm.preferredRoles,
-                              e.target.value.trim(),
-                            ]);
-                            e.target.value = "";
-                          }
-                        }}
-                      />
-                    </div>
+              <Button
+                variant="outline"
+                className="bg-white/90 hover:bg-white text-slate-800 border-white/20 "
+                onClick={() => setIsEditing(true)}
+              >
+                <Edit3 className="w-4 h-4 mr-2" />
+                Edit Profile
+              </Button>
 
-                    {/* Availability */}
-                    <div>
-                      <Label htmlFor="availability">Availability</Label>
-                      <Select
-                        value={editForm.availability}
-                        onValueChange={(value) =>
-                          handleInputChange("availability", value)
-                        }
-                      >
-                        <SelectTrigger>
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="Actively seeking internship">
-                            Actively seeking internship
-                          </SelectItem>
-                          <SelectItem value="Open to offers">
-                            Open to offers
-                          </SelectItem>
-                          <SelectItem value="Not looking">
-                            Not looking
-                          </SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Social Links */}
-                    <div>
-                      <Label>Social Links</Label>
-                      <div className="space-y-2 mt-2">
-                        <div className="flex items-center space-x-2">
-                          <Github className="w-4 h-4 text-slate-600" />
-                          <Input
-                            value={editForm.socialLinks.github}
-                            onChange={(e) =>
-                              handleSocialLinkChange("github", e.target.value)
-                            }
-                            placeholder="GitHub URL"
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Linkedin className="w-4 h-4 text-blue-600" />
-                          <Input
-                            value={editForm.socialLinks.linkedin}
-                            onChange={(e) =>
-                              handleSocialLinkChange("linkedin", e.target.value)
-                            }
-                            placeholder="LinkedIn URL"
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Globe className="w-4 h-4 text-green-600" />
-                          <Input
-                            value={editForm.socialLinks.portfolio}
-                            onChange={(e) =>
-                              handleSocialLinkChange(
-                                "portfolio",
-                                e.target.value
-                              )
-                            }
-                            placeholder="Portfolio URL"
-                          />
-                        </div>
-                        <div className="flex items-center space-x-2">
-                          <Twitter className="w-4 h-4 text-sky-500" />
-                          <Input
-                            value={editForm.socialLinks.twitter}
-                            onChange={(e) =>
-                              handleSocialLinkChange("twitter", e.target.value)
-                            }
-                            placeholder="Twitter/X URL"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Skills */}
-                    <div>
-                      <Label>Primary Skills</Label>
-                      <div className="flex flex-wrap gap-2 mt-2">
-                        {editForm.primarySkills.map((skill, index) => (
-                          <Badge
-                            key={index}
-                            variant="outline"
-                            className="cursor-pointer"
-                          >
-                            {skill}
-                          </Badge>
-                        ))}
-                      </div>
-                      <Input
-                        className="mt-2"
-                        placeholder="Add new skill (press Enter)"
-                        onKeyPress={(e) => {
-                          if (e.key === "Enter" && e.target.value.trim()) {
-                            handleInputChange("primarySkills", [
-                              ...editForm.primarySkills,
-                              e.target.value.trim(),
-                            ]);
-                            e.target.value = "";
-                          }
-                        }}
-                      />
-                    </div>
-
-                    {/* Experience */}
-                    <div>
-                      <Label htmlFor="experience">Experience/Education</Label>
-                      <Input
-                        id="experience"
-                        value={editForm.experience}
-                        onChange={(e) =>
-                          handleInputChange("experience", e.target.value)
-                        }
-                        placeholder="e.g., B.Tech 2nd Year"
-                      />
-                    </div>
-
-                    {/* Current Goal */}
-                    <div>
-                      <Label htmlFor="currentGoal">Current Goal</Label>
-                      <Textarea
-                        id="currentGoal"
-                        value={editForm.currentGoal}
-                        onChange={(e) =>
-                          handleInputChange("currentGoal", e.target.value)
-                        }
-                        placeholder="e.g., Cracking Internship by Dec 2025"
-                        rows={3}
-                      />
-                    </div>
-                  </div>
-                  <div className="flex justify-end space-x-2 pt-4">
-                    <Button variant="outline" onClick={handleCancel}>
-                      Cancel
-                    </Button>
-                    <Button onClick={handleSave}>Save Changes</Button>
-                  </div>
-                </DialogContent>
-              </Dialog>
+              <EditProfile
+                isEditing={isEditing}
+                setIsEditing={setIsEditing}
+                profileData={profileData}
+              />
             </div>
           </div>
         </div>
@@ -346,7 +126,7 @@ const ProfilePage = () => {
       <div className="px-4 md:px-8 pb-8 -mt-8">
         <div className="max-w-6xl mx-auto">
           {/* Profile Completeness Bar */}
-          <Card className="mb-6 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+          <Card className="mb-6 shadow-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
             <CardContent className="p-6">
               <div className="flex items-center justify-between mb-3">
                 <div className="flex items-center space-x-2">
@@ -370,7 +150,7 @@ const ProfilePage = () => {
 
           <div className="grid lg:grid-cols-3 gap-6">
             {/* Professional & Contact Details */}
-            <Card className="lg:col-span-2 shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+            <Card className="lg:col-span-2 shadow-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-slate-800 dark:text-slate-200">
                   <Briefcase className="w-5 h-5" />
@@ -380,7 +160,7 @@ const ProfilePage = () => {
               <CardContent className="space-y-6">
                 {/* Location & Availability */}
                 <div className="grid md:grid-cols-2 gap-4">
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800">
                     <MapPin className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                     <div>
                       <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -391,7 +171,7 @@ const ProfilePage = () => {
                       </p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50">
+                  <div className="flex items-center space-x-3 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800">
                     <Calendar className="w-5 h-5 text-slate-600 dark:text-slate-400" />
                     <div>
                       <p className="text-sm text-slate-600 dark:text-slate-400">
@@ -433,7 +213,7 @@ const ProfilePage = () => {
                         href={profileData.socialLinks.github}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        className="flex items-center space-x-2 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-800/70 transition-colors"
                       >
                         <Github className="w-5 h-5 text-slate-700 dark:text-slate-300" />
                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -446,7 +226,7 @@ const ProfilePage = () => {
                         href={profileData.socialLinks.linkedin}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        className="flex items-center space-x-2 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-800/70 transition-colors"
                       >
                         <Linkedin className="w-5 h-5 text-blue-600" />
                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -459,7 +239,7 @@ const ProfilePage = () => {
                         href={profileData.socialLinks.portfolio}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        className="flex items-center space-x-2 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-800/70 transition-colors"
                       >
                         <Globe className="w-5 h-5 text-green-600" />
                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -472,7 +252,7 @@ const ProfilePage = () => {
                         href={profileData.socialLinks.twitter}
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center space-x-2 p-3 rounded-lg bg-slate-50 dark:bg-slate-700/50 hover:bg-slate-100 dark:hover:bg-slate-700 transition-colors"
+                        className="flex items-center space-x-2 p-3 rounded-lg bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-800/70 transition-colors"
                       >
                         <Twitter className="w-5 h-5 text-sky-500" />
                         <span className="text-sm font-medium text-slate-700 dark:text-slate-300">
@@ -486,7 +266,7 @@ const ProfilePage = () => {
             </Card>
 
             {/* Career Identity Section */}
-            <Card className="shadow-lg border-0 bg-white/80 dark:bg-slate-800/80 backdrop-blur-sm">
+            <Card className="shadow-lg bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 backdrop-blur-sm">
               <CardHeader>
                 <CardTitle className="flex items-center space-x-2 text-slate-800 dark:text-slate-200">
                   <User className="w-5 h-5" />
