@@ -1,77 +1,100 @@
-import React, { useState } from 'react'
-import { useUser } from '@clerk/clerk-react'
-import { Card, CardContent, CardHeader, CardTitle } from "../components/ui/card"
-import { Badge } from "../components/ui/badge"
+import React, { useState } from "react";
+import { useUser } from "@clerk/clerk-react";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../components/ui/card";
+import { Badge } from "../components/ui/badge";
 
-
-import { Separator } from "../components/ui/separator"
-import { 
-  MapPin, 
-  Briefcase, 
-  Calendar, 
-  Github, 
-  Linkedin, 
-  Globe, 
-  Twitter, 
-  Edit3, 
-  CheckCircle, 
+import { Separator } from "../components/ui/separator";
+import {
+  MapPin,
+  Briefcase,
+  Calendar,
+  Github,
+  Linkedin,
+  Globe,
+  Twitter,
+  Edit3,
+  CheckCircle,
   User,
   Mail,
-  Phone
-} from 'lucide-react'
-import { SignedIn, UserButton } from '@clerk/clerk-react'
-import EditProfile from '../components/EditProfile'
-import { Button } from '../components/ui/button'
-
+  Phone,
+} from "lucide-react";
+import { SignedIn, UserButton } from "@clerk/clerk-react";
+import EditProfile from "../components/EditProfile";
+import { Button } from "../components/ui/button";
 
 const ProfilePage = () => {
-
-  const { user } = useUser()
-  const [isEditing, setIsEditing] = useState(false)
+  const { user } = useUser();
+  const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    location: 'KIIT',
-    preferredRoles: ['Frontend Developer', 'React Developer', 'UI/UX Designer'],
-    availability: 'Actively seeking internship',
+    firstName: "Anshu",
+    lastName: "Kumar",
+    location: "KIIT",
+    preferredRoles: ["Frontend Developer", "React Developer", "UI/UX Designer"],
+    availability: "Actively seeking internship",
     socialLinks: {
-      github: 'https://github.com/anshucodes404',
-      linkedin: 'https://linkedin.com/in/anshucodes404-found',
-      portfolio: 'https://portfolio.com',
-      twitter: 'https://twitter.com/username'
+      github: "https://github.com/anshucodes404",
+      linkedin: "https://linkedin.com/in/anshucodes404-found",
+      portfolio: "https://portfolio.com",
+      twitter: "https://twitter.com/username",
     },
-    primarySkills: ['React', 'JavaScript', 'Node.js', 'MongoDB', 'TypeScript', 'Tailwind CSS'],
-    experience: 'B.Tech 2nd Year',
-    currentGoal: 'Cracking Internship by Dec 2025'
-  })
-
-
-
+    primarySkills: [
+      "React",
+      "JavaScript",
+      "Node.js",
+      "MongoDB",
+      "TypeScript",
+      "Tailwind CSS",
+    ],
+    experience: "B.Tech 2nd Year",
+    currentGoal: "Cracking Internship by Dec 2025",
+  });
 
   const calculateProfileCompleteness = () => {
     const fields = [
       profileData.location,
       profileData.preferredRoles.length,
       profileData.availability,
-      Object.values(profileData.socialLinks).some(link => link),
+      Object.values(profileData.socialLinks).some((link) => link),
       profileData.primarySkills.length,
       profileData.experience,
-      profileData.currentGoal
-    ]
-    
-    const filledFields = fields.filter(field => 
-      field && (Array.isArray(field) ? field.length > 0 : field.trim !== '') //field && is used here to check whether the field is not empty, undefined, null
-    ).length
-    
-    return Math.round((filledFields / fields.length) * 100)
-  }
+      profileData.currentGoal,
+    ];
 
-  const profileCompleteness = calculateProfileCompleteness()
+    const filledFields = fields.filter(
+      (field) =>
+        field && (Array.isArray(field) ? field.length > 0 : field.trim !== "") //field && is used here to check whether the field is not empty, undefined, null
+    ).length;
+
+    return Math.round((filledFields / fields.length) * 100);
+  };
+
+  const profileCompleteness = calculateProfileCompleteness();
 
   return (
     <div className="min-h-screen">
       {/* Background Banner */}
       <div className="relative h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
+        <div className="absolute flex gap-4 right-4 top-3 z-50">
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+
+          <Button
+            variant="outline"
+            className="bg-white/90 hover:bg-white text-slate-800 border-white/20 "
+            onClick={() => {setIsEditing(true); console.log("Edit was clicked")}}
+          >
+            <Edit3 className="w-4 h-4 mr-2" />
+            Edit Profile
+          </Button>
+        </div>
         <div className="absolute inset-0 bg-black/20"></div>
-        <div className="absolute bottom-4 left-8 right-8">
+        <div className="absolute top-10 left-8">
           <div className="flex items-end justify-between">
             <div className="flex items-end space-x-4">
               <div className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-800 shadow-lg">
@@ -83,9 +106,9 @@ const ProfilePage = () => {
               </div>
               <div className="mb-2">
                 <h1 className="text-3xl font-bold text-white mb-1">
-                  {user?.firstName} {user?.lastName}
+                   Hello! {profileData?.firstName}
                 </h1>
-                <p className="text-blue-100 text-lg">
+                <p className="text-blue-100 text-lg font-semibold">
                   {profileData.preferredRoles[0]}
                 </p>
               </div>
@@ -98,25 +121,11 @@ const ProfilePage = () => {
                 </Badge>
               )}
 
-              <div className="absolute">
-                <SignedIn>
-                  <UserButton />
-                </SignedIn>
-              </div>
-
-              <Button
-                variant="outline"
-                className="bg-white/90 hover:bg-white text-slate-800 border-white/20 "
-                onClick={() => setIsEditing(true)}
-              >
-                <Edit3 className="w-4 h-4 mr-2" />
-                Edit Profile
-              </Button>
-
               <EditProfile
                 isEditing={isEditing}
                 setIsEditing={setIsEditing}
                 profileData={profileData}
+                setProfileData={setProfileData}
               />
             </div>
           </div>
@@ -141,7 +150,7 @@ const ProfilePage = () => {
               </div>
               <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
                 <div
-                  className="bg-gradient-to-r from-blue-500 to-purple-500 h-2 rounded-full transition-all duration-500"
+                  className="bg-black dark:bg-white h-2 rounded-full transition-all duration-500"
                   style={{ width: `${profileCompleteness}%` }}
                 ></div>
               </div>
@@ -344,6 +353,6 @@ const ProfilePage = () => {
       </div>
     </div>
   );
-}
+};
 
-export default ProfilePage
+export default ProfilePage;

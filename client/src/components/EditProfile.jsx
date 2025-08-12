@@ -33,7 +33,7 @@ import {
 import { Button } from "../components/ui/button";
 import {Badge} from "./ui/badge"
 
-const EditProfile = ({ isEditing, setIsEditing, profileData }) => {
+const EditProfile = ({ isEditing, setIsEditing, profileData, setProfileData}) => {
   const [editForm, setEditForm] = useState(profileData);
   const handleInputChange = (field, value) => {
     setEditForm((prev) => ({

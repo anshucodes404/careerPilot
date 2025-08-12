@@ -6,6 +6,36 @@ const userSchema = new Schema(
       type: String, //Comes from clerk
       required: true,
     },
+    firstName: {
+      type: String,
+    },
+    lastName: {
+      type: String,
+    },
+    location: {
+      type: String,
+    },
+    preferredRoles: [{ type: String }],
+    availability: {
+      type: String,
+    },
+    socialLinks: {
+      github: String,
+      linkedin: String,
+      portfolio: String,
+      twitter: String,
+    },
+    primarySkills: [
+      {
+        type: String,
+      },
+    ],
+    experience: {
+      type: String,
+    },
+    currentGoal: {
+      type: String,
+    },
     todayGoals: [
       {
         type: mongoose.Types.ObjectId,
