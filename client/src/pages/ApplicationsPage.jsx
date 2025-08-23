@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import CardAppUI from "../components/CardAppUI";
+// eslint-disable-next-line no-unused-vars
 import { AnimatePresence, motion } from "framer-motion";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
@@ -45,7 +46,7 @@ const ApplicationPage = () => {
 
   useEffect(() => {
     getApplications();
-  }, []);
+  });
 
   const getApplications = async () => {
     try {
@@ -88,7 +89,7 @@ const ApplicationPage = () => {
 
       setApplications((prev) => [...prev, data.data]);
     } catch (error) {
-      console.error("Application saving falied");
+      console.error("Application saving falied", error);
     }
   };
   const editApplication = async (formData) => {

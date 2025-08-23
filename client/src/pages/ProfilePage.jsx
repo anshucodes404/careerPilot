@@ -83,11 +83,14 @@ const ProfilePage = () => {
           <SignedIn>
             <UserButton />
           </SignedIn>
-
+          
           <Button
             variant="outline"
             className="bg-white/90 hover:bg-white text-slate-800 border-white/20 "
-            onClick={() => {setIsEditing(true); console.log("Edit was clicked")}}
+            onClick={() => {
+              setIsEditing(true);
+              console.log("Edit was clicked");
+            }}
           >
             <Edit3 className="w-4 h-4 mr-2" />
             Edit Profile
@@ -106,7 +109,7 @@ const ProfilePage = () => {
               </div>
               <div className="mb-2">
                 <h1 className="text-3xl font-bold text-white mb-1">
-                   Hello! {profileData?.firstName}
+                  Hello! {profileData?.firstName}
                 </h1>
                 <p className="text-blue-100 text-lg font-semibold">
                   {profileData.preferredRoles[0]}

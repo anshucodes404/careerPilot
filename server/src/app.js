@@ -10,8 +10,16 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
+const devOrigin = "http://localhost:5000"
+const hostOrigin = "https://careerpilot-jizf.onrender.com";
+
 //middlewares
-app.use(cors({ origin: "https://careerpilot-jizf.onrender.com", credentials: true }))
+app.use(cors({
+  origin: [devOrigin, hostOrigin],
+  credentials: true
+}))
+
+// app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static("public"));
@@ -47,6 +55,7 @@ app.use("/api/goals", todayGoalsRouter)
 app.use("/api/applications", applicationRouter)
 app.use("/api/resumes", resumeRouter)
 app.use("/api/ai", groqRouter)
+
 
 // Serve static files from the Vite React build if present
 const clientDistPath = path.resolve(__dirname, "../../client/dist");

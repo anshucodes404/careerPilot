@@ -32,8 +32,12 @@ import {
 } from "lucide-react";
 import { Button } from "../components/ui/button";
 import {Badge} from "./ui/badge"
+import { useUrl } from '../context/urlContext';
+import { useAuth } from "@clerk/clerk-react";
 
-const EditProfile = ({ isEditing, setIsEditing, profileData, setProfileData}) => {
+const EditProfile = ({ isEditing, setIsEditing, profileData, setProfileData }) => {
+  const {getToken} = useAuth()
+  const {url} = useUrl()
   const [editForm, setEditForm] = useState(profileData);
   const handleInputChange = (field, value) => {
     setEditForm((prev) => ({
@@ -52,9 +56,27 @@ const EditProfile = ({ isEditing, setIsEditing, profileData, setProfileData}) =>
     }));
   };
 
-  const handleSave = () => {
-    setProfileData(editForm);
-    setIsEditing(false);
+  const handleSave = async () => {
+
+    console.log(editForm)
+    try {
+      const token = await getToken()
+      fetch(`${url}/api/profile/editProfile`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(editForm)
+        }
+      )
+  
+      setProfileData(editForm);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Error while updating the profile: ", error)
+    }
   };
 
   const handleCancel = () => {

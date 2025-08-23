@@ -5,7 +5,7 @@ import { uploadOnClodinary } from "../utils/cloudinary.js";
 import { User } from "../models/user.model.js";
 
 const uploadResume = asyncHandler(async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   const resumeLocalPath = req.file?.path;
 
   if (!resumeLocalPath) {
@@ -13,27 +13,37 @@ const uploadResume = asyncHandler(async (req, res) => {
   }
 
   const resumeURL = await uploadOnClodinary(resumeLocalPath);
-  console.log(resumeURL);
 
   if (!resumeURL) {
     throw new ApiError(500, "File upload failed");
   }
-
+console.log(resumeURL)
   //adding the link of resumes to resume array in user model
-  const user = req.Auth();
+  const user = req.auth();
   const userId = user.userId;
+
+  if (!userId) {
+    throw new ApiError(401, "User not authenticated");
+  }
 
   //mongoDB query to find user
    const updateRes = await User.findOneAndUpdate(
     { userId },
     {
       $push: {
-        resumes: resumeURL,
+        resumes: resumeURL.secure_url,
       },
-    }
+    },
+    { new: true } // Return the updated document
   );
 
-  console.log(updateRes)
+  if (!updateRes) {
+    throw new ApiError(404, "User not found or update failed");
+  }
+
+  // console.log(updateRes)
+  console.log("This is the last second log")
+  console.log(resumeURL)
 
   res
     .status(200)

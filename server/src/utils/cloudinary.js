@@ -22,7 +22,7 @@ export const uploadOnClodinary = async (localFilePath) => {
             console.log("upload failed")
             return null
         }
-        console.log("Upload successfull on cloudinary", response)
+        console.log("Upload successfull on cloudinary\n", response)
         fs.unlinkSync(localFilePath)
         //deleting the file from local after successfull upload
         return response

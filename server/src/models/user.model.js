@@ -50,8 +50,7 @@ const userSchema = new Schema(
     ],
     resumes: [
       {
-        type: mongoose.Types.ObjectId,
-        ref: "Resume",
+        type: String,
       },
     ],
   },
