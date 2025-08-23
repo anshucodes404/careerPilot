@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import path from "path";
 import fs from "fs";
 import { fileURLToPath } from "url";
+import { clerkMiddleware } from '@clerk/express'
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,6 +24,7 @@ app.use(cors({
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static("public"));
+app.use(clerkMiddleware())
 
 //Importing routes
 import todayGoalsRouter from "./routes/goals.route.js";
@@ -41,13 +43,13 @@ app.get("/wake", (req, res) => {
 });
 
 // // Health check endpoint
-// app.get("/health", (req, res) => {
-//   res.json({ 
-//     status: "healthy", 
-//     uptime: process.uptime(),
-//     timestamp: new Date().toISOString()
-//   });
-// });
+app.get("/health", (req, res) => {
+  res.json({ 
+    status: "healthy", 
+    uptime: process.uptime(),
+    timestamp: new Date().toISOString()
+  });
+});
 
 //Routes declaration
 app.use("/api/profile", profileRouter)
