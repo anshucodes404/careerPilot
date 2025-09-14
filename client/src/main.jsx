@@ -18,8 +18,8 @@ const backendUrl = config.getBackendUrl();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <UrlProvider value={{url: backendUrl}}>
-    <ClerkProvider publishableKey={clerkPubKey}>
+    {/* <ClerkProvider publishableKey={clerkPubKey}> */}
       <RouterProvider router={router} />
-    </ClerkProvider>
+    {/* </ClerkProvider> */}
   </UrlProvider>
 );

@@ -15,12 +15,12 @@ const devOrigin = "http://localhost:5000"
 const hostOrigin = "https://careerpilot-jizf.onrender.com";
 
 //middlewares
-app.use(cors({
-  origin: [devOrigin, hostOrigin],
-  credentials: true
-}))
+// app.use(cors({
+//   origin: [devOrigin, hostOrigin],
+//   credentials: true
+// }))
 
-// app.use(cors())
+app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static("public"));
@@ -32,6 +32,8 @@ import applicationRouter from "./routes/application.route.js";
 import resumeRouter from "./routes/resume.route.js";
 import groqRouter from "./routes/groq.route.js";
 import profileRouter from "./routes/profile.route.js";
+import openRouter from "./routes/openRouter.js";
+import userRouter from "./routes/user.route.js";
 
 // Wake-up endpoint to prevent sleep mode
 app.get("/wake", (req, res) => {
@@ -57,6 +59,8 @@ app.use("/api/goals", todayGoalsRouter)
 app.use("/api/applications", applicationRouter)
 app.use("/api/resumes", resumeRouter)
 app.use("/api/ai", groqRouter)
+app.use("/api/openRouter", openRouter)
+app.use("/api/user", userRouter)
 
 
 // Serve static files from the Vite React build if present

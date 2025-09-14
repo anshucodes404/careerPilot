@@ -3,9 +3,10 @@ import mongoose, { Schema } from "mongoose";
 const resumeSchema = new Schema(
   {
     userId: {
-        type: String, //comes from clerk
-        required: true
-    },
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
     note: {
         type: String,
     },

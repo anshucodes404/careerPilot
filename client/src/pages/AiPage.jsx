@@ -3,7 +3,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../components/ui/button";
 import { useAuth } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown"
-import { useTypewriter } from "../utils/typeWriterEffect";
+// import { useTypewriter } from "../utils/typeWriterEffect";
 import { useUrl } from "../context/urlContext";
 
 
@@ -28,6 +28,7 @@ const AiPage = () => {
 
     //sending request
     try {
+      // const res = await fetch(`${url}/api/ai/suggestions`, {
       const res = await fetch(`${url}/api/ai/suggestions`, {
         method: "POST",
         headers: {
@@ -41,7 +42,7 @@ const AiPage = () => {
       console.log(data.data);
       setChat((prev) => [...prev, { role: "ai", content: data.data }]);
     } catch (error) {
-      console.error("Failed to respond");
+      console.error("Failed to respond", error);
     } finally {
       setIsLoading(false);
     }

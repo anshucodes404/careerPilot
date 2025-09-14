@@ -8,7 +8,7 @@ const getApplications = asyncHandler(async (req, res) => {
   const userId = user.userId;
 
   const applications = await Application.find({ userId }); //returns an array of documents whose userId matches
-  console.log(applications);
+  // console.log(applications);
 
   if (!applications) {
     throw new ApiError(500, "Applications fetching failed");

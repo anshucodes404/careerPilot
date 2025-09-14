@@ -3,9 +3,10 @@ import mongoose, { Schema } from "mongoose";
 const applicationSchema = new Schema(
   {
     userId: {
-      type: String, //comes from clerk
-      required: true,
-    },
+          type: Schema.Types.ObjectId,
+          ref: "User",
+          required: true,
+        },
     company: {
       type: String,
       required: true,

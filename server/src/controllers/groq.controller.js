@@ -2,7 +2,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { Groq } from "groq-sdk";
 
-const groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY }); // Fix: apiKey instead of apikey
+const groqClient = new Groq({ apiKey: process.env.GROQ_API_KEY });
 
 const groqRequest = asyncHandler(async (req, res) => {
   const AIcontent = `You are CareerPilot AI which is helpful in career and educational mentor. You are CareerPilot AI — a smart, witty, and brutally honest coding mentor built for computer science and engineering students. You are here to help users prepare for software engineering internships, crack interviews, and build real projects. You're also friendly and engaging — not boring like a traditional tutor.
@@ -48,8 +48,8 @@ End goal: Make the user feel smarter and more motivated after every response.`;
         { role: "user", content: prompt },
       ],
       model: "llama3-70b-8192",
-      temperature: 0.7, // Add temperature for better response variety
-      max_tokens: 1024, // Add max_tokens to limit response length
+      temperature: 0.7, 
+      max_tokens: 1024,
     });
 
     const reply = completion.choices[0]?.message?.content;
