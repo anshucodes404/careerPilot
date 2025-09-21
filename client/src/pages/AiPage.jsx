@@ -1,7 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "../components/ui/button";
-import { useAuth } from "@clerk/clerk-react";
 import ReactMarkdown from "react-markdown"
 // import { useTypewriter } from "../utils/typeWriterEffect";
 import { useUrl } from "../context/urlContext";
@@ -9,11 +8,10 @@ import { useUrl } from "../context/urlContext";
 
 
 const AiPage = () => {
-  const {url} = useUrl()
+  const { url } = useUrl()
   const [chat, setChat] = useState([]);
   const [prompt, setPrompt] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const { getToken } = useAuth();
   const chatRef = useRef(null);
   useEffect(() => {
     chatRef.current?.scrollTo(0, chatRef.current.scrollHeight);
@@ -24,16 +22,15 @@ const AiPage = () => {
     setChat((prev) => [...prev, { role: "user", content: prompt }]);
     setPrompt("");
     setIsLoading(true);
-    const token = await getToken();
+
 
     //sending request
     try {
-      // const res = await fetch(`${url}/api/ai/suggestions`, {
       const res = await fetch(`${url}/api/ai/suggestions`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ prompt }),
       });

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useUser } from "@clerk/clerk-react";
+// import { useUser } from "@clerk/clerk-react";
 import {
   Card,
   CardContent,
@@ -23,12 +23,12 @@ import {
   Mail,
   Phone,
 } from "lucide-react";
-import { SignedIn, UserButton } from "@clerk/clerk-react";
+// import { SignedIn, UserButton } from "@clerk/clerk-react";
 import EditProfile from "../components/EditProfile";
 import { Button } from "../components/ui/button";
 
 const ProfilePage = () => {
-  const { user } = useUser();
+  // const { user } = useUser();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
     firstName: "Anshu",
@@ -80,10 +80,10 @@ const ProfilePage = () => {
       {/* Background Banner */}
       <div className="relative h-48 bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600">
         <div className="absolute flex gap-4 right-4 top-3 z-50">
-          <SignedIn>
+          {/* <SignedIn>
             <UserButton />
           </SignedIn>
-          
+           */}
           <Button
             variant="outline"
             className="bg-white/90 hover:bg-white text-slate-800 border-white/20 "
@@ -102,7 +102,7 @@ const ProfilePage = () => {
             <div className="flex items-end space-x-4">
               <div className="w-24 h-24 rounded-full border-4 border-white dark:border-slate-800 overflow-hidden bg-white dark:bg-slate-800 shadow-lg">
                 <img
-                  src={user?.imageUrl || "/default-avatar.png"}
+                  // src={user?.imageUrl || "/default-avatar.png"}
                   alt="Profile"
                   className="w-full h-full object-cover"
                 />
@@ -117,12 +117,12 @@ const ProfilePage = () => {
               </div>
             </div>
             <div className="flex items-center space-x-2">
-              {user?.primaryEmailAddress?.verified && (
+              {/* {user?.primaryEmailAddress?.verified && (
                 <Badge className="bg-green-500 hover:bg-green-600 text-white">
                   <CheckCircle className="w-4 h-4 mr-1" />
                   Verified
                 </Badge>
-              )}
+              )} */}
 
               <EditProfile
                 isEditing={isEditing}
@@ -338,13 +338,13 @@ const ProfilePage = () => {
                   <div className="space-y-2">
                     <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-400">
                       <Mail className="w-4 h-4" />
-                      <span>{user?.emailAddresses[0]?.emailAddress}</span>
+                      {/* <span>{user?.emailAddresses[0]?.emailAddress}</span> */}
                     </div>
                     <div className="flex items-center space-x-2 text-sm text-slate-600 dark:text-slate-400">
                       <Calendar className="w-4 h-4" />
                       <span>
                         Member since{" "}
-                        {new Date(user?.createdAt).toLocaleDateString()}
+                        {/* {new Date(user?.createdAt).toLocaleDateString()} */}
                       </span>
                     </div>
                   </div>

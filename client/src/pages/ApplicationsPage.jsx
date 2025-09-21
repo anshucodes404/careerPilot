@@ -7,7 +7,7 @@ import { Input } from "../components/ui/input";
 import { Select } from "../components/ui/select";
 import { Plus, Search, Filter } from "lucide-react";
 import AddApplication from "../components/addApplication";
-import { useAuth } from "@clerk/clerk-react";
+// import { useAuth } from "@clerk/clerk-react";
 import ApplicationExpanded from "../components/ApplicatoinExpanded";
 import { ApplicationProvider } from "../context/applicationContext";
 import AlertDialogBox from "../components/AlertDialogBox";
@@ -17,7 +17,7 @@ import { useUrl } from "../context/urlContext";
 const ApplicationPage = () => {
   const {url} = useUrl()
   const [applications, setApplications] = useState([]);
-  const { getToken } = useAuth();
+  // const { getToken } = useAuth();
   const [expandedIdx, setExpandedIdx] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
@@ -50,11 +50,11 @@ const ApplicationPage = () => {
 
   const getApplications = async () => {
     try {
-      const token = await getToken();
+      // const token = await getToken();
       const res = await fetch(`${url}/api/applications/get`, {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
       });
 
@@ -71,14 +71,14 @@ const ApplicationPage = () => {
     console.log(formData);
     try {
       console.log("Try block");
-      const token = await getToken();
+      // const token = await getToken();
       const response = await fetch(
         `${url}/api/applications/post`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }
@@ -96,14 +96,14 @@ const ApplicationPage = () => {
     console.table(formData);
     try {
       setExpandedIdx(null);
-      const token = await getToken();
+      // const token = await getToken();
       const response = await fetch(
         `${url}/api/applications/put/${formData._id}`,
         {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(formData),
         }
@@ -125,13 +125,13 @@ const ApplicationPage = () => {
     console.table(formData);
     setExpandedIdx(null);
     try {
-      const token = await getToken();
+      // const token = await getToken();
       const response = await fetch(
         `${url}/api/applications/delete/${formData._id}`,
         {
           method: "DELETE",
           headers: {
-            Authorization: `Bearer ${token}`,
+            // Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -3,13 +3,13 @@ import { Button } from '../components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../components/ui/card'
 import { Input } from '../components/ui/input'
 import { Badge } from '../components/ui/badge'
-import { useAuth } from "@clerk/clerk-react";
+// import { useAuth } from "@clerk/clerk-react";
 import { useUrl } from '../context/urlContext'
 
 
 const ResumePage = () => {
   const {url} = useUrl()
-  const { getToken } = useAuth()
+  // const { getToken } = useAuth()
   const fileInput = useRef(null)
   const [selectedFile, setSelectedFile] = useState(null)
   const [isUploading, setIsUploading] = useState(false)
@@ -56,14 +56,14 @@ const ResumePage = () => {
     setUploadStatus(null)
 
     try {
-      const token = await getToken()
+      // const token = await getToken()
       const formData = new FormData()
       formData.append("resume", selectedFile)
 
       const res = await fetch(`${url}/api/resumes/upload`, {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: formData
       });

@@ -2,6 +2,7 @@ import React from "react";
 import { GoalProvider } from "../context/goalContext";
 import { Plus } from "lucide-react";
 import { Button } from "../components/ui/button";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import {
   Card,
@@ -14,7 +15,7 @@ import { Input } from "@/components/ui/input";
 import GoalsDecidePage from "../components/GoalsDecidePage";
 
 import { useState } from "react";
-import { useAuth } from "@clerk/clerk-react";
+// import { useAuth } from "@clerk/clerk-react";
 import { useEffect } from "react";
 import GoalItem from "../components/GoalItem";
 import { useUrl } from "../context/urlContext";
@@ -28,7 +29,7 @@ const TodayGoalsPage = () => {
 
   const [goals, setGoals] = useState([]);
   const [goal, setGoal] = useState("");
-  const { getToken } = useAuth();
+  // const { getToken } = useAuth();
   // Fetch token on mount
   useEffect(() => {
     fetchGoals();
@@ -37,11 +38,11 @@ const TodayGoalsPage = () => {
   const fetchGoals = async () => {
     console.log("Fetching today goals");
     console.log("Fetching today goals");
-    const authToken = await getToken();
-    if (!authToken) {
-      console.error("Authentication token not available.");
-      return;
-    }
+    // const authToken = await getToken();
+    // if (!authToken) {
+    //   console.error("Authentication token not available.");
+    //   return;
+    // }
     try {
       const response = await fetch(
         `${url}/api/goals/today-goals`,
@@ -49,7 +50,7 @@ const TodayGoalsPage = () => {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${authToken}`,
+            // Authorization: `Bearer ${authToken}`,
           },
         }
       );
@@ -78,18 +79,18 @@ const TodayGoalsPage = () => {
 
   const handleSave = async () => { 
     //updating data on server
-    const token = await getToken();
-    if (!token) {
-      console.error("Authentication token not available.");
-      return;
-    }
+    // const token = await getToken();
+    // if (!token) {
+    //   console.error("Authentication token not available.");
+    //   return;
+    // }
 
     try {
       await fetch(`${url}/api/goals/today-goals`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ goalText: goal }),
       });
@@ -106,18 +107,18 @@ const TodayGoalsPage = () => {
       return;
     }
 
-    const token = await getToken();
-    if (!token) {
-      console.error("Authentication token not available.");
-      return;
-    }
+    // const token = await getToken();
+    // if (!token) {
+    //   console.error("Authentication token not available.");
+    //   return;
+    // }
 
     try {
       await fetch(`${url}/api/goals/today-goals`, {
         method: "DELETE",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
           _id: goalToDelete._id,
@@ -138,11 +139,11 @@ const TodayGoalsPage = () => {
 
 
     //updating the same in server
-      const token = await getToken()
-    if(!token){
-      console.error("Authentication token not available.");
-      return;
-    }
+    //   const token = await getToken()
+    // if(!token){
+    //   console.error("Authentication token not available.");
+    //   return;
+    // }
 
     console.log(goal)
 
@@ -151,7 +152,7 @@ const TodayGoalsPage = () => {
        method: "PATCH",
        headers: {
          "Content-Type": "application/json",
-         Authorization: `Bearer ${token}`,
+        //  Authorization: `Bearer ${token}`,
        },
        body: JSON.stringify({ completed: goals[index].completed }), //no need to pass userId as the _id of goal will remain same
      })
@@ -177,11 +178,11 @@ fetchGoals()
     setGoals(prev => (prev.map((currentGoal) => (currentGoal._id === id) ? goal : currentGoal )))
 
     //patching the existing data in DB
-    const token = await getToken()
-    if(!token){
-      console.error("Authentication token not available.");
-      return;
-    }
+    // const token = await getToken()
+    // if(!token){
+    //   console.error("Authentication token not available.");
+    //   return;
+    // }
 
     console.log(goal)
 
@@ -190,7 +191,7 @@ fetchGoals()
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
+          // Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({goalText: goal.goalText}), //no need to pass userId as the _id of goal will remain same
       });

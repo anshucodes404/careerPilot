@@ -6,10 +6,10 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Menu, Sun, Moon } from "lucide-react";
 import React from "react";
 import { ModeToggle } from "./mode-toggle";
-import {
-  SignedOut,
-  SignInButton,
-} from "@clerk/clerk-react";
+// import {
+//   SignedOut,
+//   SignInButton,
+// } from "@clerk/clerk-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -84,11 +84,11 @@ const Navbar = () => {
         animate={{ opacity: 1, x: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
       >
-        <SignedOut>
+        {/* <SignedOut>
           <SignInButton mode="modal">
             <Button variant="ghost">Login</Button>
           </SignInButton>
-        </SignedOut>
+        </SignedOut> */}
         
         <ModeToggle />
       </motion.div>
@@ -114,13 +114,13 @@ const Navbar = () => {
             transition={{ duration: 0.2 }}
             className="absolute top-16 right-6 bg-white dark:bg-gray-800 p-4 rounded shadow-md sm:hidden"
           >
-            <SignedOut>
+            {/* <SignedOut>
               <SignInButton>
                 <Button variant="ghost" className="w-full">
                   Login
                 </Button>
               </SignInButton>
-            </SignedOut>
+            </SignedOut> */}
           </motion.div>
         )}
       </AnimatePresence>
