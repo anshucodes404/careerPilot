@@ -16,7 +16,7 @@ import { DB_NAME } from "../constants.js";
 
 //In the above codeBlock process.exit(1) will not run because throw stops the further execution of program
 
-const connectBD = async () => {
+const connectDB = async () => {
   try {
     const connectionInstance = await mongoose.connect(
       `${process.env.MONGODB_URI}/${DB_NAME}`
@@ -30,4 +30,4 @@ const connectBD = async () => {
   }
 };
 
-export default connectBD;
+export default connectDB;

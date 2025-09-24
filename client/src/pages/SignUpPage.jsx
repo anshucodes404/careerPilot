@@ -37,7 +37,7 @@ const SignUpPage = () => {
 
     setIsLoading(true);
     try {
-      const response = await fetch(`${url}/api/auth/register`, {
+      const response = await fetch(`${url}/api/user/register`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

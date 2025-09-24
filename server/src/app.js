@@ -11,16 +11,16 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 
-const devOrigin = "http://localhost:5000"
+const devOrigin = "http://localhost:5173"
 const hostOrigin = "https://careerpilot-jizf.onrender.com";
 
 //middlewares
-// app.use(cors({
-//   origin: [devOrigin, hostOrigin],
-//   credentials: true
-// }))
+app.use(cors({
+  origin: [devOrigin, hostOrigin],
+  credentials: true
+}))
 
-app.use(cors())
+// app.use(cors())
 app.use(cookieParser())
 app.use(express.json())
 app.use(express.static("public"));

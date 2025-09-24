@@ -65,7 +65,8 @@ const ResumePage = () => {
         headers: {
           // Authorization: `Bearer ${token}`,
         },
-        body: formData
+        credentials: "include",
+        body: formData,
       });
 
       if (res.ok) {

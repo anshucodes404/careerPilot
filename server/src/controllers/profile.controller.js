@@ -4,20 +4,20 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 
 
 const getProfile = asyncHandler(async(req, res) => {
-    const user = req.auth()
-    const userId = user.userId
+    const userId = req.user?._id
+    const profile = await User.findById(userId).select("-password -refreshToken")
+    return res.status(200).json({ success: true, data: profile })
 })
 
 const putProfile = asyncHandler(async (req, res) => {
-    const user = req.auth()
-    const userId = user.userId
+    const userId = req.user?._id
 
-    await User.findOneAndUpdate(
-        { userId },
-        {
-            $set: req.body
-        }
-    )
+    const updated = await User.findByIdAndUpdate(
+        userId,
+        { $set: req.body },
+        { new: true }
+    ).select("-password -refreshToken")
+    return res.status(200).json({ success: true, data: updated })
 })
 
 

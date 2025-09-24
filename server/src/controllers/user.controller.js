@@ -6,8 +6,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 const generateAccessAndRefreshToken = async (userId) => {
     try {
         const user = await User.findById(userId)
-        const accessToken = user.generateAcessToken;
-        const refreshToken = user.generateRefreshToken;
+        const accessToken = user.generateAccessToken();
+        const refreshToken = user.generateRefreshToken();
         user.refreshToken = refreshToken;
         await user.save({ validateBeforeSave: false })
         return {accessToken, refreshToken}
@@ -17,33 +17,46 @@ const generateAccessAndRefreshToken = async (userId) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { email, username, password } = req.body
-    if ([email, username, password].some(field => (field?.trim() === ""))) {
-        throw new ApiError(400, "Email, Username, Password is required")
+    const { email, username, password, firstName, lastName } = req.body
+    if ([email, password].some(field => (typeof field !== "string" || field.trim() === ""))) {
+        throw new ApiError(400, "Email and Password are required")
     }
 
-    const existingUser = await User.findOne({
-        $or:[{username}, {email}]
-    })
+    let finalUsername = typeof username === "string" && username.trim() !== "" ? username.trim() : (email.split("@")[0] || "user");
+
+    let suffix = 0
+    // ensure unique username
+    // try original then add numeric suffix until unique
+    // avoid infinite loop by capping
+    while (suffix < 50) {
+        const exists = await User.findOne({ username: finalUsername })
+        if (!exists) break
+        suffix += 1
+        finalUsername = `${finalUsername}${suffix}`
+    }
+
+    const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-        throw new ApiError(400, "User with this email or password already exists")
+        throw new ApiError(400, "User with this email already exists")
     }
 
     const user = await User.create({
         email,
-        username,
-        password
+        username: finalUsername,
+        password,
+        firstName,
+        lastName
     })
 
-    const userCreated = await findById(user?._id).select("-password")
+    const userCreated = await User.findById(user?._id).select("-password")
 
     if (!userCreated) {
         throw new ApiError(500, "User creation failed. Try Again !!!")
     }
 
     return res.status(200).json(
-        new ApiResponse(200, userCreated, "Register successfull. Proceed to Login")
+        new ApiResponse(200, userCreated, "Register successful. Proceed to Login")
     )
 })
 
@@ -76,9 +89,13 @@ const loginUser = asyncHandler(async (req, res) => {
 
     user.refreshToken = refreshToken
 
+    const isProd = process.env.NODE_ENV === "production"
     const options = {
         httpOnly: true,
-        secure: true
+        secure: isProd,
+        sameSite: isProd ? "none" : "lax",
+        path: "/",
+        maxAge: 7 * 24 * 60 * 60 * 1000
     }
     
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
@@ -86,16 +103,13 @@ const loginUser = asyncHandler(async (req, res) => {
     //return the user
     return res
         .status(200)
-        .cookie("AccessToken ", accessToken, options)
-        .cookie("RefreshToken ", refreshToken, options)
-        .json(
-            new ApiResponse(200, {
+        .cookie("accessToken", accessToken, options)
+        .cookie("refreshToken", refreshToken, options)
+        .json(new ApiResponse(200, {
                 user: loggedInUser,
                 accessToken,
                 refreshToken
-            }),
-            "User logged in successfully"
-        )
+            }, "User logged in successfully"))
 
 
 })

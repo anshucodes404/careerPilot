@@ -44,16 +44,14 @@ const TodayGoalsPage = () => {
     //   return;
     // }
     try {
-      const response = await fetch(
-        `${url}/api/goals/today-goals`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+      const response = await fetch(`${url}/api/goals/today-goals`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${authToken}`,
+        },
+        credentials: "include",
+      });
 
       if (!response.ok) {
         throw new Error(
@@ -90,8 +88,8 @@ const TodayGoalsPage = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({ goalText: goal }),
       });
       setGoal(""); // Clear input after successful save
@@ -120,6 +118,7 @@ const TodayGoalsPage = () => {
           "Content-Type": "application/json",
           // Authorization: `Bearer ${token}`,
         },
+        credentials: "include",
         body: JSON.stringify({
           _id: goalToDelete._id,
           userId: goalToDelete.userId,
@@ -152,8 +151,9 @@ const TodayGoalsPage = () => {
        method: "PATCH",
        headers: {
          "Content-Type": "application/json",
-        //  Authorization: `Bearer ${token}`,
+         //  Authorization: `Bearer ${token}`,
        },
+       credentials: "include",
        body: JSON.stringify({ completed: goals[index].completed }), //no need to pass userId as the _id of goal will remain same
      })
        .then((res) => res.json())
@@ -187,14 +187,18 @@ fetchGoals()
     console.log(goal)
 
     try {
-      await fetch(`http://localhost:3000/api/goals/today-goals/goalText/${goal._id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          // Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({goalText: goal.goalText}), //no need to pass userId as the _id of goal will remain same
-      });
+      await fetch(
+        `${url}/api/goals/today-goals/goalText/${goal._id}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            // Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+          body: JSON.stringify({ goalText: goal.goalText }), //no need to pass userId as the _id of goal will remain same
+        }
+      );
     } catch (error) {
       console.error("Failed to save the changes", error)
     }

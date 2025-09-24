@@ -46,16 +46,15 @@ const ApplicationPage = () => {
 
   useEffect(() => {
     getApplications();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getApplications = async () => {
     try {
       // const token = await getToken();
       const res = await fetch(`${url}/api/applications/get`, {
         method: "GET",
-        headers: {
-          // Authorization: `Bearer ${token}`,
-        },
+        credentials: "include",
       });
 
       const applications = await res.json();
@@ -72,17 +71,15 @@ const ApplicationPage = () => {
     try {
       console.log("Try block");
       // const token = await getToken();
-      const response = await fetch(
-        `${url}/api/applications/post`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(formData),
-        }
-      );
+      const response = await fetch(`${url}/api/applications/post`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          // Authorization: `Bearer ${token}`,
+        },
+        credentials: "include",
+        body: JSON.stringify(formData),
+      });
 
       const data = await response.json();
       console.log(data);
@@ -105,6 +102,7 @@ const ApplicationPage = () => {
             "Content-Type": "application/json",
             // Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
           body: JSON.stringify(formData),
         }
       );
@@ -133,6 +131,7 @@ const ApplicationPage = () => {
           headers: {
             // Authorization: `Bearer ${token}`,
           },
+          credentials: "include",
         }
       );
       const data = await response.json();

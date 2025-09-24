@@ -7,8 +7,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getTodayGoals = asyncHandler(async (req, res) => {
   // console.log("getrequest")
-  const user = req.auth();
-  const userId = user.userId;
+  const userId = req.user?._id;
 
   // Fetch all today goals for the user
   const userDocs = await TodayGoal.find({ userId }); //
@@ -24,8 +23,7 @@ const getTodayGoals = asyncHandler(async (req, res) => {
 });
 
 const addTodayGoals = asyncHandler(async (req, res) => {
-  const user = req.auth();
-  const userId = user.userId;
+  const userId = req.user?._id;
   const { goalText } = req.body;
 
   if (!goalText) {
@@ -59,12 +57,12 @@ const addTodayGoals = asyncHandler(async (req, res) => {
 
 const deleteGoals = asyncHandler(async (req, res) => {
   // console.log("req.body:", req.body);
-  const { _id, userId } = req.body;
+  const { _id } = req.body;
 
   const deleted = await TodayGoal.findByIdAndDelete(_id);
   // console.log("Deleted:", deleted);
 
-  const user = await User.findOne({ userId });
+  const user = await User.findById(req.user?._id);
   console.log("user searching..");
   if (!user) {
     throw new ApiError(500, "UserId is not correct");

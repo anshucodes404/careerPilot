@@ -4,8 +4,7 @@ import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 
 const getApplications = asyncHandler(async (req, res) => {
-  const user = req.auth();
-  const userId = user.userId;
+  const userId = req.user?._id;
 
   const applications = await Application.find({ userId }); //returns an array of documents whose userId matches
   // console.log(applications);
@@ -26,8 +25,7 @@ const postApplications = asyncHandler(async (req, res) => {
   console.log("Post request reached");
   const { company, role, location, status, notes, appliedDate, interviewDate } =
     req.body;
-  const user = req.auth();
-  const userId = user.userId;
+  const userId = req.user?._id;
 
   if (!company || !role || !appliedDate) {
     throw new ApiError(402, "Company, role, applied Date is required");

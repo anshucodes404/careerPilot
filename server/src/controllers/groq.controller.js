@@ -47,8 +47,8 @@ End goal: Make the user feel smarter and more motivated after every response.`;
         { role: "system", content: AIcontent },
         { role: "user", content: prompt },
       ],
-      model: "llama3-70b-8192",
-      temperature: 0.7, 
+      model: "llama-3.3-70b-versatile",
+      temperature: 0.7,
       max_tokens: 1024,
     });
 

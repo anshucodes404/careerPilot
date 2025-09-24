@@ -13,20 +13,34 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const LoginPage = () => {
 
   const {url} = useUrl()
+  const navigate = useNavigate()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
 
   const logInUser = async (email, password) => {
-    const user = await fetch(`${url}/api/user/login`, {
-      method: "POST",
-      body: JSON.stringify({email, password})
-    })
-    const info = await user.json()
-    console.log(info)
+    try {
+      const res = await fetch(`${url}/api/user/login`, {
+        method: "POST",
+        credentials: "include",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      })
+      const info = await res.json()
+      if (res.ok && info?.success) {
+        navigate("/dashboard")
+      } else {
+        console.error(info?.message || "Login failed")
+      }
+    } catch (e) {
+      console.error("Login error", e)
+    }
   }
 
   return (
