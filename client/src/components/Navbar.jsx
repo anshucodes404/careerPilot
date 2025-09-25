@@ -21,7 +21,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { NavLink } from "react-router-dom";
-import AvatarLogo from "./avatarLogo";
+import AvatarLogo from "./AvatarLogo";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
