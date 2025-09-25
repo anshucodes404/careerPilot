@@ -7,7 +7,7 @@ export const config = {
   },
 
   // Current environment - change this to switch between local and hosted
-  CURRENT_ENV: "HOSTED", // Change to "HOSTED" for production
+  CURRENT_ENV: "LOCAL", // Change to "HOSTED" for production
 
   // Get the current backend URL based on environment
   getBackendUrl: function () {
