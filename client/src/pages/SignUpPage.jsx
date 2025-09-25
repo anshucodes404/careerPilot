@@ -77,7 +77,7 @@ const SignUpPage = () => {
                 <Label htmlFor="firstName">First Name</Label>
                 <Input
                   id="firstName"
-                  placeholder="John"
+                  placeholder="First Name"
                   required
                   value={formData.firstName}
                   onChange={(e) =>
@@ -89,7 +89,7 @@ const SignUpPage = () => {
                 <Label htmlFor="lastName">Last Name</Label>
                 <Input
                   id="lastName"
-                  placeholder="Doe"
+                  placeholder="Last Name"
                   required
                   value={formData.lastName}
                   onChange={(e) =>
@@ -143,7 +143,7 @@ const SignUpPage = () => {
               <p className="text-sm text-red-500 dark:text-red-400">{error}</p>
             )}
 
-            <Button className="w-full" type="submit" disabled={isLoading}>
+            <Button onClick={() => handleSubmit()} className="w-full" type="submit" disabled={isLoading}>
               {isLoading ? "Creating Account..." : "Sign Up"}
             </Button>
 

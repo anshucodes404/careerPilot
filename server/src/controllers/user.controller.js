@@ -17,23 +17,23 @@ const generateAccessAndRefreshToken = async (userId) => {
 }
 
 const registerUser = asyncHandler(async (req, res) => {
-    const { email, username, password, firstName, lastName } = req.body
+    const { email, password, firstName, lastName } = req.body
     if ([email, password].some(field => (typeof field !== "string" || field.trim() === ""))) {
         throw new ApiError(400, "Email and Password are required")
     }
 
-    let finalUsername = typeof username === "string" && username.trim() !== "" ? username.trim() : (email.split("@")[0] || "user");
+    // let finalUsername = typeof username === "string" && username.trim() !== "" ? username.trim() : (email.split("@")[0] || "user");
 
-    let suffix = 0
-    // ensure unique username
-    // try original then add numeric suffix until unique
-    // avoid infinite loop by capping
-    while (suffix < 50) {
-        const exists = await User.findOne({ username: finalUsername })
-        if (!exists) break
-        suffix += 1
-        finalUsername = `${finalUsername}${suffix}`
-    }
+    // let suffix = 0
+    // // ensure unique username
+    // // try original then add numeric suffix until unique
+    // // avoid infinite loop by capping
+    // while (suffix < 50) {
+    //     const exists = await User.findOne({ username: finalUsername })
+    //     if (!exists) break
+    //     suffix += 1
+    //     finalUsername = `${finalUsername}${suffix}`
+    // }
 
     const existingUser = await User.findOne({ email })
 
@@ -43,7 +43,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
     const user = await User.create({
         email,
-        username: finalUsername,
         password,
         firstName,
         lastName
@@ -63,7 +62,7 @@ const registerUser = asyncHandler(async (req, res) => {
 const loginUser = asyncHandler(async (req, res) => {
     //get the email from req.body
     console.log(req.body)
-    const { email, password, username } = req.body
+    const { email, password } = req.body
     if (!(email || username)) {
       throw new ApiError(400, "Email is required");
     }
@@ -89,13 +88,11 @@ const loginUser = asyncHandler(async (req, res) => {
 
     user.refreshToken = refreshToken
 
-    const isProd = process.env.NODE_ENV === "production"
+    // const isProd = process.env.NODE_ENV === "production"
     const options = {
         httpOnly: true,
-        secure: isProd,
-        sameSite: isProd ? "none" : "lax",
-        path: "/",
-        maxAge: 7 * 24 * 60 * 60 * 1000
+        secure: true,
+        // maxAge: 7 * 24 * 60 * 60 * 1000
     }
     
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")

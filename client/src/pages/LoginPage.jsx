@@ -53,7 +53,7 @@ const LoginPage = () => {
               Enter your email below to login to your account
             </CardDescription>
             <CardAction>
-              <Button variant="link">Sign Up</Button>
+              <Button className="cursor-pointer" onClick={() => navigate("/signup")} variant="link">Sign Up</Button>
             </CardAction>
           </CardHeader>
           <CardContent>

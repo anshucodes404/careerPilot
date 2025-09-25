@@ -24,6 +24,9 @@ const getTodayGoals = asyncHandler(async (req, res) => {
 
 const addTodayGoals = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
+  console.log(req)
+  console.log("Now consolling req.user")
+  console.log(req.user)
   const { goalText } = req.body;
 
   if (!goalText) {
