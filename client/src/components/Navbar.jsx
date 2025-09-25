@@ -21,6 +21,7 @@ import {
   NavigationMenuViewport,
 } from "@/components/ui/navigation-menu";
 import { NavLink } from "react-router-dom";
+import AvatarLogo from "./avatarLogo";
 
 const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -91,11 +92,13 @@ const Navbar = () => {
         </SignedOut> */}
         
         <ModeToggle />
+        <AvatarLogo/>
       </motion.div>
 
       {/* Mobile menu toggle */}
       <div className="sm:hidden flex items-center gap-2">
         <ModeToggle />
+        <AvatarLogo/>
         <Button
           variant="ghost"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}

@@ -5,7 +5,9 @@ import { asyncHandler } from "../utils/asyncHandler.js"
 
 const getProfile = asyncHandler(async(req, res) => {
     const userId = req.user?._id
+    console.log(userId)
     const profile = await User.findById(userId).select("-password -refreshToken")
+    console.log(profile)
     return res.status(200).json({ success: true, data: profile })
 })
 

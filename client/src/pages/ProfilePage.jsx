@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 // import { useUser } from "@clerk/clerk-react";
 import {
   Card,
@@ -22,38 +22,55 @@ import {
   User,
   Mail,
   Phone,
+  UserPen,
 } from "lucide-react";
 // import { SignedIn, UserButton } from "@clerk/clerk-react";
 import EditProfile from "../components/EditProfile";
 import { Button } from "../components/ui/button";
+import { useUrl } from "@/context/urlContext";
 
 const ProfilePage = () => {
+
+  useEffect(() => {
+    getProfile();
+  }, [])
+
   // const { user } = useUser();
+  const { url } = useUrl();
   const [isEditing, setIsEditing] = useState(false);
   const [profileData, setProfileData] = useState({
-    firstName: "Anshu",
-    lastName: "Kumar",
-    location: "KIIT",
-    preferredRoles: ["Frontend Developer", "React Developer", "UI/UX Designer"],
-    availability: "Actively seeking internship",
+    firstName: "",
+    lastName: "",
+    location: "",
+    preferredRoles: [],
+    availability: "",
     socialLinks: {
-      github: "https://github.com/anshucodes404",
-      linkedin: "https://linkedin.com/in/anshucodes404-found",
-      portfolio: "https://portfolio.com",
-      twitter: "https://twitter.com/username",
+      github: "",
+      linkedin: "",
+      portfolio: "",
+      twitter: "",
     },
     primarySkills: [
-      "React",
-      "JavaScript",
-      "Node.js",
-      "MongoDB",
-      "TypeScript",
-      "Tailwind CSS",
+      
     ],
-    experience: "B.Tech 2nd Year",
-    currentGoal: "Cracking Internship by Dec 2025",
+    experience: "",
+    currentGoal: "",
   });
 
+  //getting user Profile from DB
+
+  const getProfile = async () => {
+    const res = await fetch(`${url}/api/profile/getProfile`,
+      {
+        method: "GET",
+        credentials: "include"
+      }
+    );
+    const user = await res.json();
+    console.log(user.data)
+    setProfileData(user.data)
+  }
+  
   const calculateProfileCompleteness = () => {
     const fields = [
       profileData.location,
@@ -92,7 +109,7 @@ const ProfilePage = () => {
               console.log("Edit was clicked");
             }}
           >
-            <Edit3 className="w-4 h-4 mr-2" />
+            <UserPen className="w-4 h-4 mr-2" />
             Edit Profile
           </Button>
         </div>

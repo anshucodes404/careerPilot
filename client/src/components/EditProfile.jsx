@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { Textarea } from "../components/ui/textarea";
@@ -39,6 +39,11 @@ const EditProfile = ({ isEditing, setIsEditing, profileData, setProfileData }) =
   // const {getToken} = useAuth()
   const {url} = useUrl()
   const [editForm, setEditForm] = useState(profileData);
+
+  useEffect(() => {
+    setEditForm(profileData);
+  }, [isEditing, profileData]);
+
   const handleInputChange = (field, value) => {
     setEditForm((prev) => ({
       ...prev,

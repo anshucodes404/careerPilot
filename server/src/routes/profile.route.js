@@ -8,7 +8,7 @@ const profileRouter = Router()
 
 profileRouter.use(verifyJWT)
 
-profileRouter.route("/get").get(getProfile)
+profileRouter.route("/getProfile").get(getProfile)
 profileRouter.route("/editProfile").put(putProfile)
 
 export default profileRouter
