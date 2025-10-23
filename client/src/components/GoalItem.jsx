@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Trash, Edit, Save } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
+// eslint-disable-next-line no-unused-vars
 import { motion } from "framer-motion";
 import { Input } from "@/components/ui/input";
 import { useGoal } from "../context/goalContext";
@@ -27,15 +28,15 @@ function GoalItem({ goal }) {
           checked={goal.completed}
           onCheckedChange={() => toggleGoal(goal._id)}
         />
-        <span className={goal.completed ? "line-through text-gray-400" : ""}>
+        <div className={`${goal.completed ? "line-through text-gray-400" : ""} bg-amber-600 w-3/4`}>
           <Input
             type="text"
             value={goalMsg}
             readOnly={!isEditable}
-            className="flex-1"
+            className="flex-1 w-full"
             onChange={(e) => setGoalMsg(e.target.value)}
           />
-        </span>
+        </div>
       </div>
       <div className="flex gap-2 text-gray-500">
         <Badge className={goal.completed ? "bg-green-600" : "bg-red-600"}>

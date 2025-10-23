@@ -70,7 +70,6 @@ if (fs.existsSync(clientDistPath)) {
 
 
   // Catch-all handler: send back React's index.html file for any non-API routes
-  // Using a regex avoids the path-to-regexp v6 "*" parsing error in Express 5
   app.get(/^\/(?!api).*/, (req, res) => {
     res.sendFile(path.join(clientDistPath, "index.html"));
   });

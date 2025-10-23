@@ -6,6 +6,7 @@ import { verifyJWT } from "../middlewares/auth.middleware.js"
 
 const applicationRouter = Router()
 
+console.log("")
 applicationRouter.use(verifyJWT)
 
 applicationRouter.route("/get").get(getApplications)
